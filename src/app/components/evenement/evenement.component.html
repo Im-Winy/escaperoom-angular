@@ -1,0 +1,19 @@
+<main class="p-0 p-lg-5" style="background-color:#F6B51F; min-height: 100vh;">
+    <div *ngIf="evenement" class="card bg-dark text-light rounded-4 overflow-hidden" style="max-width: 500px;">
+        <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 220px; object-fit: cover;">
+        <div class="card-body p-4">
+            <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
+            <p class="text-center mb-4">{{ evenement.description }}</p>
+            <div class="d-flex flex-column gap-2">
+                <p><strong>Difficulté :</strong>
+                    <span *ngIf="evenement.difficulte === 0"> Normal</span>
+                    <span *ngIf="evenement.difficulte === 1"> Intermédiaire</span>
+                    <span *ngIf="evenement.difficulte === 2"> Difficile</span>
+                </p>
+                <p><strong>Durée :</strong> {{ evenement.duree }} minutes</p>
+                <p><strong>Nombre de joueurs :</strong> {{ evenement.nbeJoueurMax }}</p>
+                <p><strong>Prix :</strong> {{ evenement.prix }}€</p>
+            </div>
+        </div>
+    </div>
+</main>

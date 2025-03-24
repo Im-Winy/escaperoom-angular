@@ -1,0 +1,25 @@
+<main class="p-0 p-lg-5" style="background-color:#F6B51F;">
+    <div class="row">
+        <div class="col-md-3" *ngFor="let evenement of evenements">
+            <a [routerLink]="['/evenement', evenement.idEvenement]" class="text-decoration-none">
+                <div class="card bg-dark text-light rounded-4 overflow-hidden" style="max-width: 500px;">
+                    <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 180px;">
+                    <div class="card-body p-4">
+                        <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
+                        <p class="text-center mb-4" style="height: 5rem;">{{ evenement.description }}</p>
+                        <div class="d-flex flex-column gap-2">
+                            <p><strong>Difficulté:</strong>
+                                <span *ngIf="evenement.difficulte === 0"> normal</span>
+                                <span *ngIf="evenement.difficulte === 1"> intermédiaire</span>
+                                <span *ngIf="evenement.difficulte === 2"> difficile</span>
+                            </p>
+                            <p><strong>Durée:</strong> {{ evenement.duree }} minutes</p>
+                            <p><strong>Nombre de joueurs:</strong> {{ evenement.nbeJoueurMax }}</p>
+                            <p><strong>Prix:</strong> {{ evenement.prix }}€</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
