@@ -1,1 +1,54 @@
-<p>login works!</p>
+<div class="container" id="main-wrapper" style="margin-top: 5em; margin-bottom: 50em;">
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <div class="card-body p-0">
+                <div class="row no-gutters">
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="mb-5">
+                                <h3 class="h4 text-theme text-center"> Login</h3>
+                            </div>
+                            <h6 class="h5 mb-0">Heureux de vous revoir!</h6>
+                            <p class="text-muted mt-2 mb-5">
+                                Entrez votre identifiant et mot de passe pour accéder à l'interface administrateur.
+                            </p>
+                            <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)">
+                                <div class="form-group">
+                                    <label for="username">Nom d'utilisateur </label>
+                                    <input type="text" class="form-control" name="username" placeholder="Username"
+                                        ngModel #usernameInput="ngModel" required>
+                                </div>
+                                <span class="help-block" style="color:red"
+                                    *ngIf="usernameInput.invalid && usernameInput.touched">
+                                    Veuillez entrer un nom d'utilisateur</span>
+                                <div class="form-group mb-5">
+                                    <label for="exampleInputPassword">Mot de passe </label>
+                                    <input type="password" class="form-control" name="password"
+                                        placeholder="Mot de passe" ngModel #passwordInput="ngModel" required>
+                                    <span class="help-block" style="color:red"
+                                        *ngIf="passwordInput.invalid && passwordInput.touched">
+                                        Veuillez entrer un mot de passe</span>
+                                </div>
+                                <button type="submit" class="btn btn-theme">
+                                    <i *ngIf="showLoading" class="fas fa-spinner fa-spin"> </i>
+                                    <span *ngIf="showLoading"> &nbsp;&nbsp;Chargement...</span>
+                                    <span *ngIf="!showLoading"> Se connecter</span>
+                                </button>
+                                <a href="#" class="forgot-link float-right text-primary" style="margin-left: 2em;">Mot
+                                    de passe oublié ?</a>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+
+            <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a routerLink="/register"
+                    class="text-primary ml-1">register</a></p>
+
+            <!-- end row -->
+        </div>
+    </div>
+
+</div>

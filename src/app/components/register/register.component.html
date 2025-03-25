@@ -1,1 +1,73 @@
-<p>register works!</p>
+<div class="container" id="main-wrapper" style="margin-top: 5em; margin-bottom: 50em;">
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <div class="card-body p-0">
+                <div class="row no-gutters">
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="mb-5">
+                                <h3 class="h4 text-theme text-center"> Login</h3>
+                            </div>
+                            <h6 class="h5 mb-0">Heureux de vous revoir!</h6>
+                            <p class="text-muted mt-2 mb-5">
+                                Entrez votre identifiant et mot de passe pour accéder à l'interface administrateur.
+                            </p>
+                            <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm.value)">
+
+                                <div class="form-group">
+                                    <label for="exampleInputFirstName">Nom  </label>
+                                    <input type="text" class="form-control" name="firstname" placeholder="firstname"
+                                        ngModel #firstNameInput="ngModel" required>
+                                </div>
+                                <span class="help-block" style="color:red"
+                                    *ngIf="firstNameInput.invalid && firstNameInput.touched">
+                                    Veuillez entrer votre prenom </span>
+
+                                <div class="form-group">
+                                    <label for="lastname">Nom d'utilisateur </label>
+                                    <input type="text" class="form-control" name="lastname" placeholder="lastname"
+                                        ngModel #lastnameInput="ngModel" required>
+                                </div>
+                                <span class="help-block" style="color:red"
+                                    *ngIf="lastnameInput.invalid && lastnameInput.touched">
+                                    Veuillez entrer votre nom </span>
+
+                                <div class="form-group">
+                                    <label for="username">Nom d'utilisateur </label>
+                                    <input type="text" class="form-control" name="username" placeholder="Username"
+                                        ngModel #usernameInput="ngModel" required>
+                                </div>
+                                <span class="help-block" style="color:red"
+                                    *ngIf="usernameInput.invalid && usernameInput.touched">
+                                    Veuillez entrer un nom d'utilisateur</span>
+                                <div class="form-group mb-5">
+                                    <label for="exampleInputEmail">Email </label>
+                                    <input type="text" class="form-control" name="email"
+                                        placeholder="Email" ngModel #emailInput="ngModel" required>
+                                    <span class="help-block" style="color:red"
+                                        *ngIf="emailInput.invalid && emailInput.touched">
+                                        Veuillez entrer un mot de passe</span>
+                                </div>
+                                <button type="submit" class="btn btn-theme" [disabled]="registerForm.invalid || showLoading">
+                                    <i *ngIf="showLoading" class="fas fa-spinner fa-spin"> </i>
+                                    <span *ngIf="showLoading"> &nbsp;&nbsp;Chargement...</span>
+                                    <span *ngIf="!showLoading"> S'inscrire</span>
+                                </button>
+                                <a href="#" class="forgot-link float-right text-primary" style="margin-left: 2em;">Mot
+                                    de passe oublié ?</a>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+
+            <p class="text-muted text-center mt-3 mb-0">You have an account? <a routerLink="/login"
+                    href="login.html" class="text-primary ml-1">login</a></p>
+
+            <!-- end row -->
+        </div>
+    </div>
+
+</div>
