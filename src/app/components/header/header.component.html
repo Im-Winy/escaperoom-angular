@@ -1,28 +1,56 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
+            <!-- Logo / Nom de la marque -->
             <a class="navbar-brand text-light" routerLink="/home" routerLinkActive="active">ESCAPEROOM</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+
+            <!-- Bouton pour mobile -->
+            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Contenu de la navbar -->
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <!-- Navigation principale -->
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link text-light fs-5" routerLink="/home" routerLinkActive="active"><i class="bi bi-house-door-fill"></i> Accueil</a>
-                    <a class="nav-link text-light fs-5" routerLink="/tous-les-evenements" routerLinkActive="active"><i class="bi bi-bookmark-star-fill"></i> Evenements</a>
-                    <a class="nav-link text-light fs-5" routerLink="/about" routerLinkActive="active"><i class="bi bi-info-circle-fill"></i> À propos</a>
-                    <a class="nav-link text-light fs-5" routerLink="/contact" routerLinkActive="active"><i class="bi bi-telephone-fill"></i> Contact</a>
+                    <a class="nav-link text-light fs-5" routerLink="/home" routerLinkActive="active">
+                        <i class="bi bi-house-door-fill"></i> Accueil
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/tous-les-evenements" routerLinkActive="active">
+                        <i class="bi bi-bookmark-star-fill"></i> Événements
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/about" routerLinkActive="active">
+                        <i class="bi bi-info-circle-fill"></i> À propos
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/contact" routerLinkActive="active">
+                        <i class="bi bi-telephone-fill"></i> Contact
+                    </a>
                 </div>
 
-                <div class="connexion me-xxl-2 p-3">
-                    <!-- lien vers la page de connexion -->
-                    <a class="nav-link text-light" routerLink="/login" routerLinkActive="active"><i class="bi bi-person-fill-lock"></i> Se connecter</a>
-                    <!-- lien vers la page d'inscription -->
-                    <a class="nav-link text-light" routerLink="/register"><i class="bi bi-pencil-square"></i> S'inscrire</a>
-                    <!-- lien vers la page de profil -->
-                    <a class="nav-link text-light" routerLink="/profil" ><i class="bi bi-person-circle"></i> Profil</a>
-                    <!-- lien vers la page du panier -->
-                    <a class="nav-link text-light" routerLink="/panier"><i class="bi bi-cart2"></i> Panier</a>
+                <!-- Menu utilisateur -->
+                <div class="d-flex align-items-center gap-3 ms-auto">
+                    <span *ngIf="!isLoggedIn" class="d-flex gap-2">
+                        <a class="nav-link text-light" routerLink="/login" routerLinkActive="active">
+                            <i class="bi bi-person-fill-lock"></i> Se connecter
+                        </a>
+                        <a class="nav-link text-light" routerLink="/register">
+                            <i class="bi bi-pencil-square"></i> S'inscrire
+                        </a>
+                    </span>
+
+                    <span *ngIf="isLoggedIn" class="d-flex gap-2 align-items-center">
+                        <a class="btn btn-link text-danger p-0 text-decoration-none" (click)="logout()">
+                            <i class="bi bi-person-fill-x"></i> Se déconnecter
+                        </a>
+                    </span>
+
+                    <a class="nav-link text-light" routerLink="/profil">
+                        <i class="bi bi-person-circle"></i> Profil
+                    </a>
+                    <a class="nav-link text-light" routerLink="/panier">
+                        <i class="bi bi-cart2"></i> Panier
+                    </a>
                 </div>
             </div>
         </div>

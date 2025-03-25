@@ -1,75 +1,95 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
-import { NotificationService } from '../../services/notification/notification.service';
-import { User } from '../../models/user/user.model';
-import { NotificationType } from '../../enum/notification-type.enum';
-import { HttpErrorResponse } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core'; // Importation des décorateurs de cycle de vie du composant
+import { Router, RouterModule } from '@angular/router'; // Importation de Router pour la navigation entre les routes
+import { Subscription } from 'rxjs'; // Importation de Subscription pour gérer les abonnements aux Observables
+import { AuthenticationService } from '../../services/authentication/authentication.service'; // Importation du service d'authentification
+import { NotificationService } from '../../services/notification/notification.service'; // Importation du service de notification
+import { User } from '../../models/user/user.model'; // Importation du modèle utilisateur
+import { NotificationType } from '../../enum/notification-type.enum'; // Importation de l'énumération pour les types de notifications
+import { HttpErrorResponse } from '@angular/common/http'; // Importation des types pour gérer les erreurs HTTP
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'; // Importation de FormsModule pour utiliser les formulaires dans le composant
+import { CommonModule } from '@angular/common'; // Importation de CommonModule pour les fonctionnalités communes dans les modules
 
 @Component({
-  selector: 'app-register',
-  imports: [FormsModule, CommonModule, RouterModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  selector: 'app-register', // Le sélecteur pour ce composant
+  imports: [FormsModule, CommonModule, RouterModule], // Déclaration des modules nécessaires pour ce composant
+  templateUrl: './register.component.html', // URL du modèle HTML du composant
+  styleUrl: './register.component.css' // URL des styles CSS pour ce composant
 })
-export class RegisterComponent  implements OnInit, OnDestroy{
+export class RegisterComponent implements OnInit, OnDestroy { // Le composant implémente OnInit et OnDestroy pour gérer les cycles de vie
 
-  public showLoading:boolean = false;
-  private subscriptions : Subscription[] =[];
+  registerForm!: FormGroup;
+  public showLoading: boolean = false; // Variable pour gérer l'affichage de l'indicateur de chargement
+  private subscriptions: Subscription[] = []; // Tableau pour stocker les abonnements aux Observables
 
-    constructor(
-      private router:Router,
-      private authenticationService : AuthenticationService,
-      private notificationService: NotificationService
-    ){}
+  constructor(
+    private router: Router, // Injection du service Router pour la navigation
+    private authenticationService: AuthenticationService, // Injection du service d'authentification
+    private notificationService: NotificationService, // Injection du service de notification
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
+    // Vérifie si l'utilisateur est déjà connecté dès que le composant est initialisé
     if (this.authenticationService.isUserLoggedIn()) {
-      this.router.navigateByUrl('/user/management');
+      this.router.navigateByUrl('/home'); // Si l'utilisateur est déjà connecté, le redirige vers la gestion des utilisateurs
     }
 
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      // autres champs du formulaire ici
+    });
   }
 
-  public onRegister(user:User):void{
-    this.showLoading = true;
+  onSubmit(): void {
+    if (this.registerForm.valid) {
+      this.showLoading = true;
+      this.authenticationService.register(this.registerForm.value).subscribe(
+        (response) => {
+          this.showLoading = false;
+          // Gérer la réponse du serveur ici
+        },
+        (error) => {
+          this.showLoading = false;
+          // Gérer les erreurs ici
+        }
+      );
+    }
+  }
+
+  // Méthode pour gérer la soumission du formulaire d'inscription
+  public onRegister(user: User): void {
+    this.showLoading = true; // Affiche l'indicateur de chargement pendant l'inscription
 
     this.subscriptions.push(
       this.authenticationService.register(user).subscribe({
-
-        next:
-        (data:User) =>{
-          this.showLoading = false;
-          this.sendNotification(NotificationType.SUCCESS,
-            `A new account was created for ${data.prenom}.`);
-
+        next: (data: User) => { // Si l'inscription réussit
+          this.showLoading = false; // Cache l'indicateur de chargement
+          this.sendNotification(NotificationType.SUCCESS, 
+            `A new account was created for ${data.prenom}.`); // Envoie une notification de succès
         },
-        error:
-        (errorResponse: HttpErrorResponse) =>{
-          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-          this.showLoading = false;
-
+        error: (errorResponse: HttpErrorResponse) => { // Si une erreur survient lors de l'inscription
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message); // Envoie une notification d'erreur avec le message retourné par le serveur
+          this.showLoading = false; // Cache l'indicateur de chargement
         }
-  })
+      })
     );
-
   }
+
+  // Méthode pour envoyer une notification à l'utilisateur
   sendNotification(notificationType: NotificationType, message: string): void {
     if (message) {
+      // Si un message est fourni, l'envoie avec le type de notification spécifié
       this.notificationService.notify(notificationType, message);
-
     } else {
+      // Si aucun message spécifique n'est fourni, envoie un message générique d'erreur
       this.notificationService.notify(notificationType, "AN ERROR OCCURED. PLEASE TRY AGAIN");
     }
-
   }
 
+  // Méthode appelée lors de la destruction du composant
   ngOnDestroy(): void {
-    this.subscriptions.forEach(
-      sub => sub.unsubscribe()
-    );
+    // Annule tous les abonnements pour éviter les fuites de mémoire
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
-
 }

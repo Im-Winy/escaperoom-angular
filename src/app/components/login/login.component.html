@@ -1,54 +1,81 @@
-<div class="container" id="main-wrapper" style="margin-top: 5em; margin-bottom: 50em;">
-    <div class="row justify-content-center">
-        <div class="col-xl-10">
-            <div class="card-body p-0">
-                <div class="row no-gutters">
-                    <div class="col-lg-6">
-                        <div class="p-5">
-                            <div class="mb-5">
-                                <h3 class="h4 text-theme text-center"> Login</h3>
+<main style="background-color: #F6B51F;">
+    <!-- La couleur de fond de la page est définie sur #F6B51F (une couleur jaune-orangé). -->
+    
+    <div class="container py-5">
+        <!-- Un conteneur Bootstrap avec des marges verticales de 5 unités (py-5). -->
+        
+        <div class="row justify-content-center">
+            <!-- Une ligne Bootstrap centrée horizontalement pour aligner les éléments à l'intérieur au centre. -->
+            
+            <div class="col-xl-6 col-lg-8">
+                <!-- Une colonne qui prend 6/12 de la largeur sur les écrans extra-larges et 8/12 sur les écrans larges. -->
+                
+                <div class="card shadow-sm">
+                    <!-- Une carte avec une légère ombre (shadow-sm). -->
+                    
+                    <div class="card-body p-5">
+                        <!-- Le corps de la carte avec des espacements de 5 unités (p-5). -->
+                        
+                        <h3 class="h4 text-theme text-center mb-4">Login</h3>
+                        <!-- Un titre principal de taille h4, centré, avec une classe "text-theme" pour appliquer une couleur de texte spécifique, et une marge en bas de 4 unités. -->
+                        
+                        <h6 class="h5">Heureux de vous revoir!</h6>
+                        <!-- Un sous-titre avec une taille h5. -->
+                        
+                        <p class="text-muted mb-4">Entrez vos identifiants pour accéder à l'interface administrateur.</p>
+                        <!-- Un paragraphe avec une couleur de texte grise (text-muted) et une marge en bas de 4 unités. -->
+                        
+                        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)">
+                            <!-- Formulaire avec la directive Angular ngForm et un événement ngSubmit pour la soumission. La méthode "onLogin" sera appelée lors de la soumission du formulaire. -->
+                            
+                            <div class="form-group">
+                                <label for="username">Nom d'utilisateur</label>
+                                <!-- Label pour le champ "Nom d'utilisateur". -->
+                                
+                                <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur" ngModel #usernameInput="ngModel" required>
+                                <!-- Champ de saisie pour le nom d'utilisateur avec ngModel pour la liaison bidirectionnelle des données. Le champ est requis. -->
+                                
+                                <div *ngIf="usernameInput.invalid && usernameInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché si le champ est invalide et a été touché. -->
+                                    Veuillez entrer un nom d'utilisateur.
+                                </div>
                             </div>
-                            <h6 class="h5 mb-0">Heureux de vous revoir!</h6>
-                            <p class="text-muted mt-2 mb-5">
-                                Entrez votre identifiant et mot de passe pour accéder à l'interface administrateur.
-                            </p>
-                            <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)">
-                                <div class="form-group">
-                                    <label for="username">Nom d'utilisateur </label>
-                                    <input type="text" class="form-control" name="username" placeholder="Username"
-                                        ngModel #usernameInput="ngModel" required>
+                            
+                            <div class="form-group mb-4">
+                                <label for="password">Mot de passe</label>
+                                <!-- Label pour le champ "Mot de passe". -->
+                                
+                                <input type="password" class="form-control" name="password" placeholder="Mot de passe" ngModel #passwordInput="ngModel" required>
+                                <!-- Champ de saisie pour le mot de passe avec ngModel et la validation "required". Le champ masque l'entrée pour la sécurité. -->
+                                
+                                <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché si le mot de passe est invalide et a été touché. -->
+                                    Veuillez entrer un mot de passe.
                                 </div>
-                                <span class="help-block" style="color:red"
-                                    *ngIf="usernameInput.invalid && usernameInput.touched">
-                                    Veuillez entrer un nom d'utilisateur</span>
-                                <div class="form-group mb-5">
-                                    <label for="exampleInputPassword">Mot de passe </label>
-                                    <input type="password" class="form-control" name="password"
-                                        placeholder="Mot de passe" ngModel #passwordInput="ngModel" required>
-                                    <span class="help-block" style="color:red"
-                                        *ngIf="passwordInput.invalid && passwordInput.touched">
-                                        Veuillez entrer un mot de passe</span>
-                                </div>
-                                <button type="submit" class="btn btn-theme">
-                                    <i *ngIf="showLoading" class="fas fa-spinner fa-spin"> </i>
-                                    <span *ngIf="showLoading"> &nbsp;&nbsp;Chargement...</span>
-                                    <span *ngIf="!showLoading"> Se connecter</span>
-                                </button>
-                                <a href="#" class="forgot-link float-right text-primary" style="margin-left: 2em;">Mot
-                                    de passe oublié ?</a>
-
-                            </form>
-                        </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-theme btn-block" [disabled]="loginForm.invalid || showLoading">
+                                <!-- Bouton de soumission qui est désactivé si le formulaire est invalide ou si le chargement est en cours. -->
+                                
+                                <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+                                <!-- Icône de chargement (spinner) affichée lorsque "showLoading" est vrai. -->
+                                
+                                <span *ngIf="showLoading">Chargement...</span>
+                                <!-- Texte "Chargement..." affiché lorsque "showLoading" est vrai. -->
+                                
+                                <span *ngIf="!showLoading">Se connecter</span>
+                                <!-- Texte du bouton affiché lorsque "showLoading" est faux, avec l'option "Se connecter". -->
+                            </button>
+                        </form>
+                        
+                        <a href="#" class="float-right text-primary text-decoration-none">Mot de passe oublié ?</a>
+                        <!-- Lien pour réinitialiser le mot de passe, aligné à droite, avec une couleur de texte primaire. -->
+                        
+                        <p class="text-muted text-center mt-4">Vous n'avez pas de compte ? <a routerLink="/register" class="text-primary text-decoration-none">S'inscrire</a></p>
+                        <!-- Texte centré avec un lien pour s'inscrire si l'utilisateur n'a pas de compte. Le lien utilise "routerLink" pour naviguer vers la page d'inscription. -->
                     </div>
                 </div>
             </div>
-            <!-- end card -->
-
-            <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a routerLink="/register"
-                    class="text-primary ml-1">register</a></p>
-
-            <!-- end row -->
         </div>
     </div>
-
-</div>
+</main>
