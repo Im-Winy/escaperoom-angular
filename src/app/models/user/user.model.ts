@@ -13,7 +13,7 @@ export class User {
     public lastLoginDate: Date;
     public lastLoginDateDisplay: Date;
     public joinDate: Date;
-    public role: string; //ROLE_USER(read, edit), ROLE_ADIM(...,delete)
+    public role: string; //ROLE_USER(read, edit), ROLE_ADMIN(...,delete)
     public authorities: string[];  //[]=tableau de string, Authorities = permissions(read,edit,delete)
     public active: boolean;  //Pour activer les rôles
     public notLocked: boolean;

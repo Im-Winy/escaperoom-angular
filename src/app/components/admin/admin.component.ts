@@ -8,8 +8,6 @@ import { NotificationService } from '../../services/notification/notification.se
 import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CustomHttpResponse } from '../../models/custom-http-response';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin',
@@ -23,6 +21,7 @@ export class AdminComponent implements OnInit {
   public refreshing: boolean = false;
   private subscriptions: Subscription[] = [];
   declare public selectedUser: User | null;
+  roles: string[] = ['ROLE_USER', 'ROLE_HR', 'ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']; // Liste des rôles disponibles
   userForm!: FormGroup;
   successMessage: string = '';
   errorMessage: string = '';
@@ -31,7 +30,7 @@ export class AdminComponent implements OnInit {
     private userService: UserService,
     private notificationService: NotificationService,
     private fb: FormBuilder,
-    private toastr: ToastrService) { }
+  ) { }
 
   ngOnInit(): void {
     this.getUsers(true);
@@ -39,7 +38,8 @@ export class AdminComponent implements OnInit {
       prenom: ['', Validators.required],
       nom: ['', Validators.required],
       username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      role: ['', Validators.required]
     });
   }
 
@@ -85,11 +85,7 @@ export class AdminComponent implements OnInit {
     formData.append('nom', this.userForm.value.nom);
     formData.append('username', this.userForm.value.username);
     formData.append('email', this.userForm.value.email);
-
-    // Ajout du fichier avatar s'il est sélectionné
-    if (this.userForm.value.avatar) {
-      formData.append('avatar', this.userForm.value.avatar);
-    }
+    formData.append('role', this.userForm.value.role);
 
     console.log('Données envoyées :', Array.from(formData.entries()));
 
@@ -104,8 +100,6 @@ export class AdminComponent implements OnInit {
       }
     });
   }
-
-
 
   public onSelectUser(selectedUser: User): void {
     this.selectedUser = selectedUser;

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Evenement } from '../../models/evenement/evenement.model';
 import { difficulte } from '../../models/evenement/difficulte';
 import { Observable, of } from 'rxjs';
+import { AppSettings } from '../../settings/app.settings';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +17,19 @@ export class EvenementService {
     new Evenement(4, "Le Casino", 'Plongez dans une ambiance palpitante où chance et stratégie se rencontrent.', '/casino.jpg', 45, 3, 35, difficulte.intermédiaire)
   ];
 
-  constructor() { }
+  // Stocke l'URL de base de l'API pour éviter la duplication
+  private host = AppSettings.APP_URL;
+
+  // Injection du service HttpClient pour faire des appels HTTP
+  constructor(private http: HttpClient) { }
+
+  // Ajoute un nouvel utilisateur en envoyant un formulaire de données
+  public addEvenement(formData: FormData): Observable<Evenement> {
+    return this.http.post<Evenement>(`${this.host}/evenements`, formData);
+  }
 
   getEvenements(): Observable<Evenement[]> {
-    return of(this.evenements);
+    return this.http.get<Evenement[]>(`${this.host}/evenements`);
   }
 
   getEvenement(id: number): Observable<Evenement | undefined> {

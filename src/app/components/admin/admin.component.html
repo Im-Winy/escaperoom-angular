@@ -1,4 +1,4 @@
-<main class="p-2 p-lg-3" style="background-color:#F6B51F; height: 50rem;">
+<main class="p-2 p-lg-3" style="background-color:#F6B51F;">
 
     <!-- Main content -->
     <div class="container">
@@ -6,10 +6,6 @@
         <div class="d-flex flex-column flex-md-row justify-content-end mb-3">
 
             <input type="search" class="form-control w-100 w-md-auto mb-2 mb-md-0 me-md-2">
-
-            <button class="btn btn-dark mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#addUserModel">
-                <i class="bi bi-person-plus-fill"></i>
-            </button>
 
             <button class="btn btn-dark ms-md-2" (click)="getUsers(true)">
                 <i [class]="refreshing ? 'bi bi-arrow-repeat' : 'bi bi-arrow-clockwise'"></i>
@@ -26,6 +22,7 @@
                         <th>Nom</th>
                         <th>Nom d'utilisateur</th>
                         <th>Email</th>
+                        <th>Rôle</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -37,13 +34,15 @@
                         <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.nom}}</td>
                         <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.username}}</td>
                         <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.email}}</td>
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.role}}</td><!-- ROLE -->
                         <td>
                             <span class="badge" [class.bg-success]="user?.active" [class.bg-danger]="!user?.active">
                                 {{ user?.active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td>
-                            <button class="btn btn-outline-info btn-sm" aria-label="Edit User">
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">
+                            <button class="btn btn-outline-info btn-sm" aria-label="Edit User" data-bs-toggle="modal"
+                                data-bs-target="#EditUserModel">
                                 <i class="bi bi-person-gear"></i>
                             </button>
                             <button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.idUser)"
@@ -55,13 +54,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-
-    <!-- Modal de modification utilisateur -->
-    <div class="modal fade" id="addUserModel" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-
-
     </div>
 
     <!-- Formulaire de modification d'utilisateur -->
@@ -106,8 +98,19 @@
             </div>
         </div>
 
+        <!-- Champ Sélection du Rôle -->
+        <div class="mb-3">
+            <label for="role" class="form-label">Rôle :</label>
+            <select id="role" class="form-control" formControlName="role">
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+            <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
+                Rôle requis !
+            </div>
+        </div>
+
         <!-- Bouton de soumission -->
-        <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">
+        <button type="submit" class="btn btn-dark w-100" [disabled]="userForm.invalid">
             Mettre à jour
         </button>
 
