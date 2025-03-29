@@ -7,10 +7,10 @@ import { NotificationType } from '../../enum/notification-type.enum';
 })
 export class NotificationService {
 
-  constructor( private notifier:NotifierService) { }
+  constructor(private notifier: NotifierService) { }
 
-  public notify(type:NotificationType, message:string){
-    this.notifier.notify(type,message);
+  public notify(type: NotificationType, message: string) {
+    this.notifier.notify(type, message);
 
   }
 }

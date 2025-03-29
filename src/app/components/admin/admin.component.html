@@ -1,0 +1,124 @@
+<main class="p-2 p-lg-3" style="background-color:#F6B51F; height: 50rem;">
+
+    <!-- Main content -->
+    <div class="container">
+
+        <div class="d-flex flex-column flex-md-row justify-content-end mb-3">
+
+            <input type="search" class="form-control w-100 w-md-auto mb-2 mb-md-0 me-md-2">
+
+            <button class="btn btn-dark mb-2 mb-md-0" data-bs-toggle="modal" data-bs-target="#addUserModel">
+                <i class="bi bi-person-plus-fill"></i>
+            </button>
+
+            <button class="btn btn-dark ms-md-2" (click)="getUsers(true)">
+                <i [class]="refreshing ? 'bi bi-arrow-repeat' : 'bi bi-arrow-clockwise'"></i>
+            </button>
+
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Nom d'utilisateur</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.id}}</td>
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.prenom}}</td>
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.nom}}</td>
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.username}}</td>
+                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.email}}</td>
+                        <td>
+                            <span class="badge" [class.bg-success]="user?.active" [class.bg-danger]="!user?.active">
+                                {{ user?.active ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-info btn-sm" aria-label="Edit User">
+                                <i class="bi bi-person-gear"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.idUser)"
+                                aria-label="Delete User">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Modal de modification utilisateur -->
+    <div class="modal fade" id="addUserModel" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+
+
+    </div>
+
+    <!-- Formulaire de modification d'utilisateur -->
+    <form [formGroup]="userForm" (ngSubmit)="updateUser()" class="container mt-4 p-4 border rounded shadow bg-light">
+
+        <h3 class="text-center mb-4">Modifier un utilisateur</h3>
+
+        <!-- Champ Prénom -->
+        <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom :</label>
+            <input id="prenom" type="text" class="form-control" formControlName="prenom" placeholder="Entrez le prénom">
+            <div *ngIf="userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched" class="text-danger">
+                Prénom requis !
+            </div>
+        </div>
+
+        <!-- Champ Nom -->
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom :</label>
+            <input id="nom" type="text" class="form-control" formControlName="nom" placeholder="Entrez le nom">
+            <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-danger">
+                Nom requis !
+            </div>
+        </div>
+
+        <!-- Champ Nom d'utilisateur -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur :</label>
+            <input id="username" type="text" class="form-control" formControlName="username"
+                placeholder="Entrez le nom d'utilisateur">
+            <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-danger">
+                Nom d'utilisateur requis !
+            </div>
+        </div>
+
+        <!-- Champ Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email :</label>
+            <input id="email" type="email" class="form-control" formControlName="email" placeholder="Entrez l'email">
+            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
+                Email invalide !
+            </div>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">
+            Mettre à jour
+        </button>
+
+        <!-- Message de confirmation ou d'erreur -->
+        <div *ngIf="successMessage" class="alert alert-success mt-3">
+            ✅ Utilisateur mis à jour avec succès !
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            ❌ Erreur lors de la mise à jour. Veuillez réessayer.
+        </div>
+
+    </form>
+
+</main>

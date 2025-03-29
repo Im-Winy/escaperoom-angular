@@ -1,33 +1,42 @@
-import { authorization } from "./authorization";
-
 export class User {
-    idUser: number;
-    username: string;
-    password: string;
-    authorization: authorization;
-    nom: string;
-    prenom: string;
-    email: string;
-    telephone: string;
-    adresse: string;
-    ville: string;
-    pays: string;
+    public idUser: number;
+    public id: string;
+    public username: string;
+    public password: string;
+    public nom: string;
+    public prenom: string;
+    public email: string;
+    public telephone: string;
+    public adresse: string;
+    public ville: string;
+    public pays: string;
+    public lastLoginDate: Date;
+    public lastLoginDateDisplay: Date;
+    public joinDate: Date;
+    public role: string; //ROLE_USER(read, edit), ROLE_ADIM(...,delete)
+    public authorities: string[];  //[]=tableau de string, Authorities = permissions(read,edit,delete)
+    public active: boolean;  //Pour activer les rôles
+    public notLocked: boolean;
 
-
-    constructor(id: number, username: string, password: string, authorization: authorization, nom: string, prenom: string, email: string,
-        telephone: string, adresse: string, ville: string, pays: string
-    ) {
-        this.idUser = id;
-        this.username = username;
-        this.password = password;
-        this.authorization = authorization;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.telephone = telephone;
-        this.adresse = adresse;
-        this.ville = ville;
-        this.pays = pays;
+    constructor() {
+        this.idUser = 0,
+        this.id = '',
+        this.username = '',
+        this.password = '', 
+        this.nom = '',
+        this.prenom = '',
+        this.email = '',
+        this.telephone = '',
+        this.adresse = '',
+        this.ville = '',
+        this.pays = '',
+        this.lastLoginDate = new Date(),
+        this.lastLoginDateDisplay = new Date(),
+        this.joinDate = new Date(),
+        this.role = '',
+        this.authorities = [],
+        this.active = false,
+        this.notLocked = false;
     }
 
 }

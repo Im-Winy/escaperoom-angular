@@ -9,6 +9,8 @@ import { TousLesEvenementsComponent } from './components/tous-les-evenements/tou
 import { AuthenticationGuard } from './guard/authentication.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { UserComponent } from './components/user/user.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'welcome', pathMatch: 'full' }, // Route pour la page "Accueil"
@@ -18,6 +20,8 @@ export const routes: Routes = [
     { path: 'contact', component: ContactComponent },  // Route pour la page "Contact"
     { path: 'login', component: LoginComponent },  // Route pour la page "Connexion"
     { path: 'register', component: RegisterComponent },  // Route pour la page "Inscription"
+    { path: 'profile', component: UserComponent },  // Route pour la page "Utilisateur"
+    { path: 'admin', component: AdminComponent },  // Route pour la page "Administrateur"
     { path: 'evenement/:id', component: EvenementComponent }, // Route pour la page "Evenement"
     { path: 'tous-les-evenements', component: TousLesEvenementsComponent },  // Route pour la page "tous les Evenements"
     { path: '**', component: PageNotFoundComponent } // Route pour la page "page introuvable / erreur 404"

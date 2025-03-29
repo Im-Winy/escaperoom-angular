@@ -1,4 +1,4 @@
-<main style="background-color: #F6B51F;">
+<main style="background-color: #F6B51F; height: 50rem;">
     <!-- Le fond de la page est défini avec une couleur spécifique (#F6B51F). -->
     
     <div class="container py-5">
@@ -32,7 +32,7 @@
                                 <label for="prenom">Prénom</label>
                                 <!-- Champ pour le prénom avec un label associé. -->
                                 
-                                <input type="text" class="form-control" name="prenom" placeholder="Prénom" ngModel #firstNameInput="ngModel" required>
+                                <input type="text" class="form-control" name="prenom" ngModel #firstNameInput="ngModel" required>
                                 <!-- Champ de saisie avec ngModel pour la liaison bidirectionnelle. Validation avec "required". -->
                                 
                                 <div *ngIf="firstNameInput.invalid && firstNameInput.touched" class="text-danger">
@@ -45,7 +45,7 @@
                                 <label for="nom">Nom</label>
                                 <!-- Champ pour le nom avec un label associé. -->
                                 
-                                <input type="text" class="form-control" name="nom" placeholder="Nom" ngModel #lastnameInput="ngModel" required>
+                                <input type="text" class="form-control" name="nom" ngModel #lastnameInput="ngModel" required>
                                 <!-- Champ de saisie pour le nom avec ngModel et validation "required". -->
                                 
                                 <div *ngIf="lastnameInput.invalid && lastnameInput.touched" class="text-danger">
@@ -58,7 +58,7 @@
                                 <label for="username">Nom d'utilisateur</label>
                                 <!-- Champ pour le nom d'utilisateur avec un label associé. -->
                                 
-                                <input type="text" class="form-control" name="username" placeholder="Username" ngModel #usernameInput="ngModel" required>
+                                <input type="text" class="form-control" name="username" ngModel #usernameInput="ngModel" required>
                                 <!-- Champ de saisie pour le nom d'utilisateur avec ngModel et validation "required". -->
                                 
                                 <div *ngIf="usernameInput.invalid && usernameInput.touched" class="text-danger">
@@ -71,7 +71,7 @@
                                 <label for="email">Email</label>
                                 <!-- Champ pour l'email avec un label associé. -->
                                 
-                                <input type="text" class="form-control" name="email" placeholder="Email" ngModel #emailInput="ngModel" required>
+                                <input type="text" class="form-control" name="email" ngModel #emailInput="ngModel" required>
                                 <!-- Champ de saisie pour l'email avec ngModel et validation "required". -->
                                 
                                 <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">

@@ -41,22 +41,6 @@ export class RegisterComponent implements OnInit, OnDestroy { // Le composant im
     });
   }
 
-  onSubmit(): void {
-    if (this.registerForm.valid) {
-      this.showLoading = true;
-      this.authenticationService.register(this.registerForm.value).subscribe(
-        (response) => {
-          this.showLoading = false;
-          // Gérer la réponse du serveur ici
-        },
-        (error) => {
-          this.showLoading = false;
-          // Gérer les erreurs ici
-        }
-      );
-    }
-  }
-
   // Méthode pour gérer la soumission du formulaire d'inscription
   public onRegister(user: User): void {
     this.showLoading = true; // Affiche l'indicateur de chargement pendant l'inscription
