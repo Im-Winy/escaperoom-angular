@@ -5,10 +5,10 @@
             <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
             <p class="text-center mb-4">{{ evenement.description }}</p>
             <div class="d-flex flex-column gap-2">
-                <p><strong>Difficulté :</strong>
-                    <span *ngIf="evenement.difficulte === 0"> Normal</span>
-                    <span *ngIf="evenement.difficulte === 1"> Intermédiaire</span>
-                    <span *ngIf="evenement.difficulte === 2"> Difficile</span>
+                <p><strong>Difficulté:</strong>
+                    <span *ngIf="evenement.difficulte === 'normal'"> Normal</span>
+                    <span *ngIf="evenement.difficulte === 'intermédiaire'"> Intermédiaire</span>
+                    <span *ngIf="evenement.difficulte === 'difficile'"> Difficile</span>
                 </p>
                 <p><strong>Durée :</strong> {{ evenement.duree }} minutes</p>
                 <p><strong>Nombre de joueurs :</strong> {{ evenement.nbeJoueurMax }}</p>

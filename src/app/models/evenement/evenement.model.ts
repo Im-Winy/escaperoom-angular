@@ -1,26 +1,22 @@
-import { difficulte } from "./difficulte";
-
 export class Evenement {
-    idEvenement: number;
-    nom: string;
-    description: string;
-    image: string;
-    duree: number;
-    nbeJoueurMax: number;
-    prix: number;
-    difficulte: difficulte;
+    public idEvenement: number;
+    public nom: string;
+    public description: string;
+    public image: string;
+    public duree: number;
+    public nbeJoueurMax: number;
+    public prix: number;
+    public difficulte: string;
 
-    constructor(idEvenement: number, nom: string, description: string, image: string, duree: number, nbeJoueurMax: number, prix: number,
-        difficulte: difficulte
-    ) {
-        this.idEvenement = idEvenement;
-        this.nom = nom;
-        this.description = description;
-        this.image = image;
-        this.nom = nom;
-        this.duree = duree;
-        this.nbeJoueurMax = nbeJoueurMax;
-        this.prix = prix;
-        this.difficulte = difficulte;
+    constructor() {
+        this.idEvenement = 0;
+        this.nom = '';
+        this.description = '';
+        this.image = '';
+        this.nom = '';
+        this.duree = 0;
+        this.nbeJoueurMax = 0;
+        this.prix = 0;
+        this.difficulte = '';
     }
 }
