@@ -1,8 +1,8 @@
-<main class="p-0 p-lg-5" style="background-color:#F6B51F; height: 50rem;">
+<main class="p-0 p-lg-5" style="background-color:#F6B51F;">
     <div class="row">
         <div class="col-md-3" *ngFor="let evenement of evenements">
             <a [routerLink]="['/evenement', evenement.idEvenement]" class="text-decoration-none">
-                <div class="card bg-dark text-light rounded-4 overflow-hidden" style="max-width: 500px;">
+                <div class="card bg-dark text-light rounded-4 overflow-hidden mb-3" style="max-width: 500px;">
                     <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 180px;">
                     <div class="card-body p-4">
                         <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
