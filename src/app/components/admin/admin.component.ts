@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { User } from '../../models/user/user.model';
 import { UserService } from '../../services/user/user.service';
 import { NotificationType } from '../../enum/notification-type.enum';
@@ -17,20 +17,22 @@ import { EvenementService } from '../../services/evenement/evenement.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
 
   // -------------------------
   // Déclaration des variables
   // -------------------------
-  public users: User[] = [];
-  public evenements: Evenement[] = [];
-  public refreshing: boolean = false;
+  public users: User[] = []; //Tableau des utilisateurs
+  public evenements: Evenement[] = []; //Tableau des évènements
+  public refreshing: boolean = false; //Refresh
   private subscriptions: Subscription[] = [];
   declare public selectedUser: User | null;
   declare public selectedEvenement: Evenement | null;
-  roles: string[] = ['ROLE_USER', 'ROLE_HR', 'ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']; // Liste des rôles disponibles
+  difficultes: string[] = ['NORMAL', 'INTERMEDIAIRE', 'DIFFICILE'] //Liste des niveaux de difficultés disponibles
+  roles: string[] = ['ROLE_USER', 'ROLE_HR', 'ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']; //Liste des rôles disponibles
   userForm!: FormGroup;
-  evenementForm!: FormGroup;
+  updateEvenementForm!: FormGroup;
+  addEvenementForm!: FormGroup;
   successMessage: string = '';
   errorMessage: string = '';
 
@@ -49,16 +51,24 @@ export class AdminComponent implements OnInit {
   // ------------------------
   ngOnInit(): void {
     this.getUsers(true); //Charge les utilisateurs dès le démarrage du composant
-    this.userForm = this.fb.group({ //Charge 
+    this.userForm = this.fb.group({ //Charge le formulaire de modification d'utilisateur
       prenom: ['', Validators.required],
       nom: ['', Validators.required],
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required]
     });
-
     this.getEvenements(); //Charge les évènements dès le démarrage du composant
-    this.evenementForm = this.fb.group({ //Charge
+    this.updateEvenementForm = this.fb.group({ //Charge le formulaire de modification d'évènement
+      nom: ['', Validators.required],
+      image: ['', Validators.required],
+      description: ['', Validators.required],
+      nbeJoueurMax: ['', [Validators.required]],
+      duree: ['', [Validators.required]],
+      difficulte: ['', Validators.required],
+      prix: ['', Validators.required]
+    });
+    this.addEvenementForm = this.fb.group({ //Charge le formulaire d'ajout d'évènement
       nom: ['', Validators.required],
       image: ['', Validators.required],
       description: ['', Validators.required],
@@ -121,7 +131,7 @@ export class AdminComponent implements OnInit {
     console.log('Données envoyées :', Array.from(formData.entries()));
     this.userService.updateUser(formData, this.selectedUser.idUser).subscribe({
       next: (updatedUser) => {
-        console.log('Utilisateur mis à jour avec succès 🎉');
+        console.log('Utilisateur mis à jour avec succès');
         this.selectedUser = updatedUser;
         this.userForm.reset();
       },
@@ -158,28 +168,88 @@ export class AdminComponent implements OnInit {
 
   /* .................................................................................................................................. */
 
+  imagePreview: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
+
+  // Variable pour stocker le fichier sélectionné
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (file) {
+      this.selectedFile = file; // Stocke le fichier dans une variable
+      this.addEvenementForm.patchValue({ image: file.name }); // Stocke le nom du fichier
+
+      // Générer un aperçu de l'image
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result; // Met à jour l'aperçu
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // --------------------
+  // Ajout d'un évènement
+  // --------------------
+  addEvenements(): void {
+    this.refreshing = true;
+    const formData = new FormData();
+
+    // Ajouter les autres champs
+    formData.append('nom', this.addEvenementForm.value.nom);
+    formData.append('description', this.addEvenementForm.value.description);
+    formData.append('duree', this.addEvenementForm.value.duree);
+    formData.append('nbeJoueurMax', this.addEvenementForm.value.nbeJoueurMax);
+    formData.append('prix', this.addEvenementForm.value.prix);
+    formData.append('difficulte', this.addEvenementForm.value.difficulte);
+
+    // Vérifier si une image est sélectionnée et l'ajouter
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile, this.selectedFile.name);
+    } else {
+      console.warn("Aucune image sélectionnée !");
+    }
+
+    console.log('Données envoyées :', Array.from(formData.entries()));
+
+    this.subscriptions.push(
+      this.evenementService.addEvenement(formData).subscribe({
+        next: (data: Evenement) => {
+          console.log('Évènement ajouté avec succès');
+          this.sendNotification(NotificationType.SUCCESS, `Un nouvel évènement a été créé : ${data.nom}`);
+          this.addEvenementForm.reset();
+          this.selectedFile = null; // Réinitialiser le fichier sélectionné
+          this.imagePreview = null; // Réinitialiser l'aperçu
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'ajout de l\'évènement :', error);
+        }
+      })
+    );
+  }
+
   // --------------------------
   // Mise à jour d'un évènement
   // --------------------------
   updateEvenement(): void {
-    if (this.evenementForm.invalid || !this.selectedEvenement?.idEvenement) {
+    if (this.updateEvenementForm.invalid || !this.selectedEvenement?.idEvenement) {
       console.warn("Formulaire invalide ou évènement non sélectionné.");
       return;
     }
     const formData = new FormData();
-    formData.append('nom', this.evenementForm.value.nom);
-    formData.append('description', this.evenementForm.value.description);
-    formData.append('image', this.evenementForm.value.image);
-    formData.append("duree", this.evenementForm.value.duree);
-    formData.append("nbeJoueurMax", this.evenementForm.value.nbeJoueurMax);
-    formData.append("prix", this.evenementForm.value.prix);
-    formData.append('difficulte', this.evenementForm.value.difficulte);
+    formData.append('nom', this.updateEvenementForm.value.nom);
+    formData.append('description', this.updateEvenementForm.value.description);
+    formData.append('image', this.updateEvenementForm.value.image);
+    formData.append("duree", this.updateEvenementForm.value.duree);
+    formData.append("nbeJoueurMax", this.updateEvenementForm.value.nbeJoueurMax);
+    formData.append("prix", this.updateEvenementForm.value.prix);
+    formData.append('difficulte', this.updateEvenementForm.value.difficulte);
     console.log('Données envoyées :', Array.from(formData.entries()));
     this.evenementService.updateEvenement(formData, this.selectedEvenement.idEvenement).subscribe({
       next: (updatedEvenement) => {
-        console.log('Évènement mis à jour avec succès 🎉');
+        console.log('Évènement mis à jour avec succès');
         this.selectedEvenement = updatedEvenement;
-        this.evenementForm.reset();
+        this.updateEvenementForm.reset();
       },
       error: (error) => {
         console.error('Erreur lors de la mise à jour de l\'évènement :', error);
@@ -195,6 +265,7 @@ export class AdminComponent implements OnInit {
     this.subscriptions.push(
       this.evenementService.getEvenements().subscribe(evenements => {
         this.evenements = evenements;
+        this.refreshing = false;
       }));
   }
 
@@ -203,7 +274,7 @@ export class AdminComponent implements OnInit {
   // ------------------------
   public onSelectEvenement(selectedEvenement: Evenement): void {
     this.selectedEvenement = selectedEvenement;
-    this.evenementForm?.patchValue(selectedEvenement);
+    this.updateEvenementForm?.patchValue(selectedEvenement);
   }
 
   // --------------------------
@@ -221,6 +292,12 @@ export class AdminComponent implements OnInit {
         }
       );
     }
+  }
+
+  // Méthode appelée lors de la destruction du composant
+  ngOnDestroy(): void {
+    // Annule tous les abonnements pour éviter les fuites de mémoire
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

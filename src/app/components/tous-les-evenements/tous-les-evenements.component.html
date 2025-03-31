@@ -6,7 +6,7 @@
                     <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 180px;">
                     <div class="card-body p-4">
                         <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
-                        <p class="text-center mb-4" style="height: 5rem;">{{ evenement.description }}</p>
+                        <p class="text-center mb-4" style="height: 5rem;">{{evenement.description.slice(0, 90)}}...</p>
                         <div class="d-flex flex-column gap-2">
                             <p><strong>Difficulté:</strong>
                                 <span *ngIf="evenement.difficulte === 'NORMAL'"> Normal</span>

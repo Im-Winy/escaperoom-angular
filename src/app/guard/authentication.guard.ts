@@ -13,7 +13,7 @@ export const AuthenticationGuard: CanActivateChildFn = () => {
     // Si l'utilisateur n'est pas authentifié
     if (!auth) {
         // Redirige l'utilisateur vers la page d'accueil (route racine)
-        inject(Router).navigate(['']);
+        inject(Router).navigate(['/welcome']);
 
         // Affiche une notification d'erreur pour informer l'utilisateur qu'il doit être connecté
         inject(NotificationService).notify(NotificationType.ERROR,
