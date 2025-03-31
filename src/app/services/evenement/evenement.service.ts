@@ -20,12 +20,23 @@ export class EvenementService {
     return this.http.post<Evenement>(`${this.host}/api/auth/evenement`, formData);
   }
 
+  // Récupère tout les évènements
   public getEvenements(): Observable<Evenement[]> {
     return this.http.get<Evenement[]>(`${this.host}/api/auth/evenement/list`);
   }
 
+  // Récupère un évènement via son identifiant
   public getEvenement(id: number): Observable<Evenement> {
     return this.http.get<Evenement>(`${this.host}/api/auth/evenement/${id}`);
   }
 
+  // Met à jour un évènement existant en envoyant un formulaire de données
+  public updateEvenement(formData: FormData, id: number): Observable<Evenement> {
+    return this.http.put<Evenement>(`${this.host}/api/auth/update/evenement/${id}`, formData);
+  }
+
+  // Supprime un évènement via son identifiant
+  public deleteEvenement(id: number): Observable<Evenement> {
+    return this.http.delete<Evenement>(`${this.host}/api/auth/delete/evenement/${id}`);
+  }
 }

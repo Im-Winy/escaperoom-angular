@@ -1,16 +1,214 @@
 <main class="p-2 p-lg-3" style="background-color:#F6B51F;">
 
-    <!-- Main content -->
+    <!-- Formulaire de modification d'utilisateur -->
+    <!-- Boîte modale -->
+    <div class="modal fade" id="EditUserModel" tabindex="-1" aria-labelledby="EditUserModelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditUserModelLabel">Modifier un utilisateur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulaire -->
+                    <form [formGroup]="userForm" (ngSubmit)="updateUser()">
+                        <!-- Champ Prénom -->
+                        <div class="mb-3">
+                            <label for="prenom" class="form-label">Prénom :</label>
+                            <input id="prenom" type="text" class="form-control" formControlName="prenom"
+                                placeholder="Entrez le prénom">
+                            <div *ngIf="userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched"
+                                class="text-danger">
+                                Prénom requis !
+                            </div>
+                        </div>
+
+                        <!-- Champ Nom -->
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom :</label>
+                            <input id="nom" type="text" class="form-control" formControlName="nom"
+                                placeholder="Entrez le nom">
+                            <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched"
+                                class="text-danger">
+                                Nom requis !
+                            </div>
+                        </div>
+
+                        <!-- Champ Nom d'utilisateur -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nom d'utilisateur :</label>
+                            <input id="username" type="text" class="form-control" formControlName="username"
+                                placeholder="Entrez le nom d'utilisateur">
+                            <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched"
+                                class="text-danger">
+                                Nom d'utilisateur requis !
+                            </div>
+                        </div>
+
+                        <!-- Champ Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email :</label>
+                            <input id="email" type="email" class="form-control" formControlName="email"
+                                placeholder="Entrez l'email">
+                            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                                class="text-danger">
+                                Email invalide !
+                            </div>
+                        </div>
+
+                        <!-- Champ Sélection du Rôle -->
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Rôle :</label>
+                            <select id="role" class="form-control" formControlName="role">
+                                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+                            </select>
+                            <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+                                class="text-danger">
+                                Rôle requis !
+                            </div>
+                        </div>
+
+                        <!-- Boutons -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-dark" [disabled]="userForm.invalid">Mettre à
+                                jour</button>
+                        </div>
+
+                        <!-- Messages de confirmation ou d'erreur -->
+                        <div *ngIf="successMessage" class="alert alert-success mt-3">
+                            ✅ Utilisateur mis à jour avec succès !
+                        </div>
+                        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                            ❌ Erreur lors de la mise à jour. Veuillez réessayer.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de modification d'évènement -->
+    <!-- Boîte modale -->
+    <div class="modal fade" id="EditEventModel" tabindex="-1" aria-labelledby="EditEventModelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditEventModelLabel">Modifier un évènement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulaire -->
+                    <form [formGroup]="evenementForm" (ngSubmit)="updateEvenement()">
+
+                        <!-- Champ Nom -->
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom :</label>
+                            <input id="nom" type="text" class="form-control" formControlName="nom"
+                                placeholder="Entrez le nom">
+                            <div *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched"
+                                class="text-danger">
+                                Nom requis !
+                            </div>
+                        </div>
+
+                        <!-- Champ Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description :</label>
+                            <textarea id="description" class="form-control" formControlName="description"
+                                placeholder="Entrez la description"></textarea>
+                            <div *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched"
+                                class="text-danger">
+                                Description requise !
+                            </div>
+                        </div>
+
+                        <!-- Champ Difficulté -->
+                        <div class="mb-3">
+                            <label for="difficulte" class="form-label">Difficulté :</label>
+                            <select id="difficulte" class="form-control" formControlName="difficulte">
+                                <option *ngFor="let evenement of evenements" [value]="evenement.difficulte">
+                                    {{ evenement.difficulte }}
+                                </option>
+                            </select>
+                            <div *ngIf="evenementForm.get('difficulte')?.invalid && evenementForm.get('difficulte')?.touched"
+                                class="text-danger">
+                                Difficulté requise !
+                            </div>
+                        </div>
+
+                        <!-- Champ Durée -->
+                        <div class="mb-3">
+                            <label for="duree" class="form-label">Durée :</label>
+                            <input id="duree" type="number" class="form-control" formControlName="duree"
+                                placeholder="Entrez la durée">
+                            <div *ngIf="evenementForm.get('duree')?.invalid && evenementForm.get('duree')?.touched"
+                                class="text-danger">
+                                Durée requise !
+                            </div>
+                        </div>
+
+                        <!-- Champ Prix -->
+                        <div class="mb-3">
+                            <label for="prix" class="form-label">Prix :</label>
+                            <input id="prix" type="number" class="form-control" formControlName="prix"
+                                placeholder="Entrez le prix">
+                            <div *ngIf="evenementForm.get('prix')?.invalid && evenementForm.get('prix')?.touched"
+                                class="text-danger">
+                                Prix requise !
+                            </div>
+                        </div>
+
+                        <!-- Champ Nombre de joueur maximum -->
+                        <div class="mb-3">
+                            <label for="nbeJoueurMax" class="form-label">Nombre de joueurs maximum :</label>
+                            <input id="nbeJoueurMax" type="number" class="form-control" formControlName="nbeJoueurMax"
+                                placeholder="Entrez le nombre de joueurs maximum">
+                            <div *ngIf="evenementForm.get('nbeJoueurMax')?.invalid && evenementForm.get('nbeJoueurMax')?.touched"
+                                class="text-danger">
+                                Nombre de joueurs requis !
+                            </div>
+                        </div>
+
+                        <!-- Champ Image -->
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Lien d'image :</label>
+                            <input id="image" type="text" class="form-control" formControlName="image"
+                                placeholder="Entrez un lien d'image">
+                            <div *ngIf="evenementForm.get('image')?.invalid && evenementForm.get('image')?.touched"
+                                class="text-danger">
+                                Image requis !
+                            </div>
+                        </div>
+
+                        <!-- Boutons -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-dark" [disabled]="evenementForm.invalid">Mettre à
+                                jour</button>
+                        </div>
+
+                        <!-- Messages de confirmation ou d'erreur -->
+                        <div *ngIf="successMessage" class="alert alert-success mt-3">
+                            ✅ Évènement mis à jour avec succès !
+                        </div>
+                        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                            ❌ Erreur lors de la mise à jour. Veuillez réessayer.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestion des utilisateurs -->
     <div class="container">
-
+        <h2 class="text-center mb-3">Gestion des utilisateurs</h2>
         <div class="d-flex flex-column flex-md-row justify-content-end mb-3">
-
             <input type="search" class="form-control w-100 w-md-auto mb-2 mb-md-0 me-md-2">
-
             <button class="btn btn-dark ms-md-2" (click)="getUsers(true)">
                 <i [class]="refreshing ? 'bi bi-arrow-repeat' : 'bi bi-arrow-clockwise'"></i>
             </button>
-
         </div>
 
         <div class="table-responsive">
@@ -29,24 +227,24 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let user of users">
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.id}}</td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.prenom}}</td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.nom}}</td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.username}}</td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.email}}</td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">{{user?.role}}</td><!-- ROLE -->
+                        <td (click)="onSelectUser(user)">{{user?.id}}</td>
+                        <td (click)="onSelectUser(user)">{{user?.prenom}}</td>
+                        <td (click)="onSelectUser(user)">{{user?.nom}}</td>
+                        <td (click)="onSelectUser(user)">{{user?.username}}</td>
+                        <td (click)="onSelectUser(user)">{{user?.email}}</td>
+                        <td (click)="onSelectUser(user)">{{user?.role}}</td>
                         <td>
                             <span class="badge" [class.bg-success]="user?.active" [class.bg-danger]="!user?.active">
                                 {{ user?.active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td style="cursor: pointer;" (click)="onSelectUser(user)">
-                            <button class="btn btn-outline-info btn-sm" aria-label="Edit User" data-bs-toggle="modal"
+                        <td>
+                            <!-- Bouton d'édition -->
+                            <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#EditUserModel">
                                 <i class="bi bi-person-gear"></i>
                             </button>
-                            <button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.idUser)"
-                                aria-label="Delete User">
+                            <button class="btn btn-outline-danger btn-sm" (click)="deleteUser(user.idUser)">
                                 <i class="bi bi-trash-fill"></i>
                             </button>
                         </td>
@@ -56,72 +254,58 @@
         </div>
     </div>
 
-    <!-- Formulaire de modification d'utilisateur -->
-    <form [formGroup]="userForm" (ngSubmit)="updateUser()" class="container mt-4 p-4 border rounded shadow bg-light">
-
-        <h3 class="text-center mb-4">Modifier un utilisateur</h3>
-
-        <!-- Champ Prénom -->
-        <div class="mb-3">
-            <label for="prenom" class="form-label">Prénom :</label>
-            <input id="prenom" type="text" class="form-control" formControlName="prenom" placeholder="Entrez le prénom">
-            <div *ngIf="userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched" class="text-danger">
-                Prénom requis !
-            </div>
+    <!-- Gestion des événements -->
+    <div class="container mt-2">
+        <h2 class="text-center mb-3">Gestion des événements</h2>
+        <div class="d-flex flex-column flex-md-row justify-content-end mb-3">
+            <input type="search" class="form-control w-100 w-md-auto mb-2 mb-md-0 me-md-2">
+            <button class="btn btn-dark ms-md-2" (click)="getEvenements()">
+                <i [class]="refreshing ? 'bi bi-arrow-repeat' : 'bi bi-arrow-clockwise'"></i>
+            </button>
         </div>
 
-        <!-- Champ Nom -->
-        <div class="mb-3">
-            <label for="nom" class="form-label">Nom :</label>
-            <input id="nom" type="text" class="form-control" formControlName="nom" placeholder="Entrez le nom">
-            <div *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-danger">
-                Nom requis !
-            </div>
+        <div class="table-responsive">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Difficulté</th>
+                        <th>Durée</th>
+                        <th>Joueurs max</th>
+                        <th>Prix</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let evenement of evenements">
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.idEvenement}}</td>
+                        <td (click)="onSelectEvenement(evenement)"><img [src]="evenement?.image" alt="Image" width="50">
+                        </td>
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.nom}}</td>
+                        <td (click)="onSelectEvenement(evenement)">
+                            {{ evenement?.description?.slice(0, 20) }}...
+                        </td>
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.difficulte}}</td>
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.duree}}</td>
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.nbeJoueurMax}}</td>
+                        <td (click)="onSelectEvenement(evenement)">{{evenement?.prix}}</td>
+                        <td>
+                            <!-- Bouton d'édition -->
+                            <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#EditEventModel">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm"
+                                (click)="deleteEvenement(evenement.idEvenement)">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <!-- Champ Nom d'utilisateur -->
-        <div class="mb-3">
-            <label for="username" class="form-label">Nom d'utilisateur :</label>
-            <input id="username" type="text" class="form-control" formControlName="username"
-                placeholder="Entrez le nom d'utilisateur">
-            <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-danger">
-                Nom d'utilisateur requis !
-            </div>
-        </div>
-
-        <!-- Champ Email -->
-        <div class="mb-3">
-            <label for="email" class="form-label">Email :</label>
-            <input id="email" type="email" class="form-control" formControlName="email" placeholder="Entrez l'email">
-            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
-                Email invalide !
-            </div>
-        </div>
-
-        <!-- Champ Sélection du Rôle -->
-        <div class="mb-3">
-            <label for="role" class="form-label">Rôle :</label>
-            <select id="role" class="form-control" formControlName="role">
-                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-            </select>
-            <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
-                Rôle requis !
-            </div>
-        </div>
-
-        <!-- Bouton de soumission -->
-        <button type="submit" class="btn btn-dark w-100" [disabled]="userForm.invalid">
-            Mettre à jour
-        </button>
-
-        <!-- Message de confirmation ou d'erreur -->
-        <div *ngIf="successMessage" class="alert alert-success mt-3">
-            ✅ Utilisateur mis à jour avec succès !
-        </div>
-        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-            ❌ Erreur lors de la mise à jour. Veuillez réessayer.
-        </div>
-
-    </form>
-
+    </div>
 </main>
