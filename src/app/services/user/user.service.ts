@@ -32,6 +32,11 @@ export class UserService {
     return this.http.put<User>(`${this.host}/api/auth/update/${userId}`, formData);
   }
 
+  // Met à jour un utilisateur existant en envoyant un formulaire de données
+  public updateMyProfile(formData: FormData, userId: number): Observable<User> {
+    return this.http.put<User>(`${this.host}/api/auth/user/${userId}`, formData);
+  }
+
   // Supprime un utilisateur via son identifiant
   public deleteUser(userId: number): Observable<CustomHttpResponse> {
     return this.http.delete<CustomHttpResponse>(`${this.host}/api/auth/delete/${userId}`);

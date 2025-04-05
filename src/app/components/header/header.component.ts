@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Route, Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { CommonModule } from '@angular/common';
+import { RoleService } from '../../services/role/role.service';
 
 @Component({
   selector: 'app-header',
@@ -12,15 +13,17 @@ import { CommonModule } from '@angular/common';
 export class HeaderComponent implements OnInit {
 
   isLoggedIn = false!
+  hasRole = false!
 
   constructor(
     private authenticationService: AuthenticationService, // Injection du service d'authentification
+    private roleService: RoleService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authenticationService.isUserLoggedIn();
-
+    this.hasRole = this.roleService.hasRole('ROLE_ADMIN');
   }
 
   logout() {

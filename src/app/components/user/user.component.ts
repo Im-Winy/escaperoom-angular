@@ -60,7 +60,7 @@ export class UserComponent implements OnInit {
     formData.append('username', this.formUpdate.value.username);
     formData.append('email', this.formUpdate.value.email);
 
-    this.userService.updateUser(formData, this.user.idUser).subscribe({
+    this.userService.updateMyProfile(formData, this.user.idUser).subscribe({
       next: (updatedUser) => {
         this.user = updatedUser;
         this.successMessage = 'Utilisateur mis à jour avec succès.';

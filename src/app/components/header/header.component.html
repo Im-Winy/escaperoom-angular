@@ -5,8 +5,9 @@
             <a class="navbar-brand text-light" routerLink="/home" routerLinkActive="active">ESCAPEROOM</a>
 
             <!-- Bouton pour mobile -->
-            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -45,7 +46,7 @@
                         </a>
                     </span>
 
-                    <span *ngIf="isLoggedIn" class="d-flex gap-2 align-items-center">
+                    <span *ngIf="hasRole" class="d-flex gap-2 align-items-center">
                         <a class="nav-link text-light" routerLink="/admin">
                             <i class="bi bi-pencil-square"></i> Admin
                         </a>

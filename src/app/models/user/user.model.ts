@@ -13,30 +13,30 @@ export class User {
     public lastLoginDate: Date;
     public lastLoginDateDisplay: Date;
     public joinDate: Date;
-    public role: string; //ROLE_USER(read, edit), ROLE_ADMIN(...,delete)
+    public role: string[]; //ROLE_USER(read, edit), ROLE_ADMIN(...,delete)
     public authorities: string[];  //[]=tableau de string, Authorities = permissions(read,edit,delete)
     public active: boolean;  //Pour activer les rôles
     public notLocked: boolean;
 
     constructor() {
         this.idUser = 0,
-        this.id = '',
-        this.username = '',
-        this.password = '', 
-        this.nom = '',
-        this.prenom = '',
-        this.email = '',
-        this.telephone = '',
-        this.adresse = '',
-        this.ville = '',
-        this.pays = '',
-        this.lastLoginDate = new Date(),
-        this.lastLoginDateDisplay = new Date(),
-        this.joinDate = new Date(),
-        this.role = '',
-        this.authorities = [],
-        this.active = false,
-        this.notLocked = false;
+            this.id = '',
+            this.username = '',
+            this.password = '',
+            this.nom = '',
+            this.prenom = '',
+            this.email = '',
+            this.telephone = '',
+            this.adresse = '',
+            this.ville = '',
+            this.pays = '',
+            this.lastLoginDate = new Date(),
+            this.lastLoginDateDisplay = new Date(),
+            this.joinDate = new Date(),
+            this.role = [],
+            this.authorities = [],
+            this.active = false,
+            this.notLocked = false;
     }
 
 }
