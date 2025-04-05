@@ -9,14 +9,14 @@ export const roleGuard: CanActivateChildFn = (childRoute) => {
   const router = inject(Router);
   const notificationService = inject(NotificationService);
 
-  // 👇 Récupération des rôles requis définis dans le routing
+  // Récupération des rôles requis définis dans le routing
   const requiredRoles: string[] = childRoute.data['role'];
 
   const hasAccess = roleService.hasAnyRole(requiredRoles);
 
   if (!hasAccess) {
     notificationService.notify(NotificationType.ERROR, `You don't have permission to access this page`);
-    router.navigate(['/home']); // ou redirige vers une autre page
+    router.navigate(['/welcome']); // ou redirige vers une autre page
     return false;
   }
 
