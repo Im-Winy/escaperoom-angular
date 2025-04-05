@@ -3,6 +3,7 @@ import { Evenement } from '../../models/evenement/evenement.model';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { EvenementService } from '../../services/evenement/evenement.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event',
@@ -16,11 +17,11 @@ export class EvenementComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute, // Injecte le service ActivatedRoute pour récupérer les paramètres de l'URL
-    private evenementService: EvenementService // Injecte le service qui permet de récupérer les événements
+    private evenementService: EvenementService, // Injecte le service qui permet de récupérer les événements
+    private titleService: Title
   ) { }
 
-  ngOnInit(): void {// Le composant est initialisé
-
+  ngOnInit(): void {
     // Récupère l'ID depuis les paramètres de l'URL et le convertit en nombre
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -32,9 +33,13 @@ export class EvenementComponent implements OnInit {
 
     // Appelle le service pour récupérer l'événement correspondant à l'ID
     this.evenementService.getEvenement(id).subscribe({
-
       // Si la requête réussit, on stocke l'événement dans la variable
-      next: (evenement) => this.evenement = evenement,
+      next: (evenement) => {
+        this.evenement = evenement;
+
+        // Une fois l'événement récupéré, on met à jour le titre de la page
+        this.titleService.setTitle(evenement.nom);
+      },
 
       // Si la requête échoue, on affiche un message d'erreur dans la console
       error: (err) => console.error("Erreur lors de la récupération de l'événement", err)

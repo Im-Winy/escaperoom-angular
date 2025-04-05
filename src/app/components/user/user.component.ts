@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/user/user.model';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user',
@@ -19,10 +20,16 @@ export class UserComponent implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private authenticationService: AuthenticationService, private fb: FormBuilder, private userService: UserService) { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private fb: FormBuilder, 
+    private userService: UserService,
+    private titleService: Title
+  ) { }
 
   ngOnInit(): void {
 
+    this.titleService.setTitle('Profil');
     this.formUpdate = this.fb.group({
       prenom: ['', Validators.required],
       nom: ['', Validators.required],

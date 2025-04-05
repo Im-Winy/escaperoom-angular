@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page-not-found',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class PageNotFoundComponent {
 
+  constructor(private titleService: Title) {}
+
+  ngOnInit() {
+    this.titleService.setTitle('Page introuvable');
+  }
 }

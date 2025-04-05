@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reservation',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './reservation.component.css'
 })
 export class ReservationComponent {
+  constructor(private titleService: Title) {}
 
+  ngOnInit() {
+    this.titleService.setTitle('Réservation');
+  }
 }

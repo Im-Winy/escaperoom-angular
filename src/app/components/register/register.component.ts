@@ -8,6 +8,7 @@ import { NotificationType } from '../../enum/notification-type.enum'; // Importa
 import { HttpErrorResponse } from '@angular/common/http'; // Importation des types pour gérer les erreurs HTTP
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'; // Importation de FormsModule pour utiliser les formulaires dans le composant
 import { CommonModule } from '@angular/common'; // Importation de CommonModule pour les fonctionnalités communes dans les modules
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-register', // Le sélecteur pour ce composant
@@ -25,7 +26,8 @@ export class RegisterComponent implements OnInit, OnDestroy { // Le composant im
     private router: Router, // Injection du service Router pour la navigation
     private authenticationService: AuthenticationService, // Injection du service d'authentification
     private notificationService: NotificationService, // Injection du service de notification
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private titleService: Title
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +35,8 @@ export class RegisterComponent implements OnInit, OnDestroy { // Le composant im
     if (this.authenticationService.isUserLoggedIn()) {
       this.router.navigateByUrl('/home'); // Si l'utilisateur est déjà connecté, le redirige vers la gestion des utilisateurs
     }
+
+    this.titleService.setTitle('S\'inscrire');
 
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(4)]],

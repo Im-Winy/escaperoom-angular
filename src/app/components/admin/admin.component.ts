@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Evenement } from '../../models/evenement/evenement.model';
 import { EvenementService } from '../../services/evenement/evenement.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin',
@@ -43,13 +44,15 @@ export class AdminComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private notificationService: NotificationService,
     private fb: FormBuilder,
-    private evenementService: EvenementService
+    private evenementService: EvenementService,
+    private titleService: Title
   ) { }
 
   // ------------------------
   // Méthode d'initialisation
   // ------------------------
   ngOnInit(): void {
+    this.titleService.setTitle('Tableau de bord');
     this.getUsers(true); //Charge les utilisateurs dès le démarrage du composant
     this.userForm = this.fb.group({ //Charge le formulaire de modification d'utilisateur
       prenom: ['', Validators.required],

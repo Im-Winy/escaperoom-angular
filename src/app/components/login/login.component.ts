@@ -9,6 +9,7 @@ import { HeaderType } from '../../enum/header-type.enum'; // Importation de l'é
 import { NotificationType } from '../../enum/notification-type.enum'; // Importation de l'énumération pour les types de notifications
 import { FormsModule } from '@angular/forms'; // Importation de FormsModule pour utiliser les formulaires dans le composant
 import { CommonModule } from '@angular/common'; // Importation de CommonModule pour les fonctionnalités communes dans les modules
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login', // Le sélecteur pour ce composant
@@ -21,10 +22,12 @@ export class LoginComponent implements OnInit, OnDestroy { // Le composant impl�
   public showLoading !: boolean; // Variable qui gère l'affichage du chargement lors de la soumission du formulaire
   private subscriptions: Subscription[] = []; // Tableau pour stocker les abonnements aux Observables et pouvoir les désabonner
 
+
   constructor(
     private router: Router, // Injection du service Router pour la navigation
     private authenticationService: AuthenticationService, // Injection du service d'authentification
-    private notificationService: NotificationService // Injection du service de notification
+    private notificationService: NotificationService, // Injection du service de notification
+    private titleService: Title
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +37,8 @@ export class LoginComponent implements OnInit, OnDestroy { // Le composant impl�
     } else {
       this.router.navigateByUrl('/login'); // Si non connecté, assure que l'utilisateur reste sur la page de connexion
     }
+
+    this.titleService.setTitle('Se connecter');
   }
 
   // Méthode pour gérer la soumission du formulaire de connexion
