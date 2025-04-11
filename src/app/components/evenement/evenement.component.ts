@@ -1,49 +1,81 @@
+// evenement.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Evenement } from '../../models/evenement/evenement.model';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { EvenementService } from '../../services/evenement/evenement.service';
+import { ReservationService } from '../../services/reservation/reservation.service';
 import { Title } from '@angular/platform-browser';
+import { TimeSlot } from '../../models/time-slot/time-slot.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-event',
-  imports: [CommonModule],
+  selector: 'app-evenement',
+  imports: [CommonModule, FormsModule],
   templateUrl: './evenement.component.html',
-  styleUrl: './evenement.component.css'
+  styleUrls: ['./evenement.component.css']
 })
 export class EvenementComponent implements OnInit {
-
-  evenement: Evenement | undefined;
+  evenement: any;
+  evenementId!: number;
+  selectedDate: string = '';
+  timeSlots: TimeSlot[] = [];  // Correctement défini comme un tableau de TimeSlot[]
+  isLoading = true;
 
   constructor(
-    private route: ActivatedRoute, // Injecte le service ActivatedRoute pour récupérer les paramètres de l'URL
-    private evenementService: EvenementService, // Injecte le service qui permet de récupérer les événements
+    private route: ActivatedRoute,
+    private evenementService: EvenementService,
+    private reservationService: ReservationService,
     private titleService: Title
   ) { }
 
   ngOnInit(): void {
-    // Récupère l'ID depuis les paramètres de l'URL et le convertit en nombre
     const id = Number(this.route.snapshot.paramMap.get('id'));
-
-    // Vérifie si l'ID est valide (c'est-à-dire un nombre)
     if (isNaN(id)) {
-      console.error("ID invalide"); // Affiche une erreur si l'ID est incorrect
-      return; // Stoppe l'exécution pour éviter une requête invalide
+      console.error("ID invalide");
+      return;
     }
 
-    // Appelle le service pour récupérer l'événement correspondant à l'ID
+    this.evenementId = id;
+    this.loadEventDetails(id);
+  }
+
+  loadEventDetails(id: number): void {
     this.evenementService.getEvenement(id).subscribe({
-      // Si la requête réussit, on stocke l'événement dans la variable
       next: (evenement) => {
         this.evenement = evenement;
-
-        // Une fois l'événement récupéré, on met à jour le titre de la page
         this.titleService.setTitle(evenement.nom);
+        this.isLoading = false;
       },
-
-      // Si la requête échoue, on affiche un message d'erreur dans la console
-      error: (err) => console.error("Erreur lors de la récupération de l'événement", err)
+      error: (err) => {
+        console.error("Erreur lors de la récupération de l'événement", err);
+        this.isLoading = false;
+      }
     });
   }
 
+  onDateChange(event: any): void {
+    this.selectedDate = event.target.value;
+    if (this.selectedDate) {
+      this.loadAvailableTimeSlots();
+    } else {
+      this.timeSlots = []; // On vide les créneaux si la date est vide
+    }
+  }
+  
+  
+  loadAvailableTimeSlots(): void {
+    if (this.selectedDate) {
+      this.reservationService.getAvailableTimeSlotsForEvent(this.evenementId, this.selectedDate)
+        .subscribe({
+          next: (slots: TimeSlot[]) => {
+            this.timeSlots = slots;
+            console.log("Créneaux horaires : ", this.timeSlots);
+          },
+          error: (err) => {
+            console.error('Erreur de chargement des créneaux :', err);
+          }
+        });
+    }
+  }
+  
 }
