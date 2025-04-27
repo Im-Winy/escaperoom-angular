@@ -1,11 +1,13 @@
 <main class="p-0 p-lg-5" style="background-color:#F6B51F; min-height: 100vh;">
   <div class="container">
     <div class="row justify-content-center">
-      
+
       <!-- Première colonne (Événement) -->
       <div class="col-md-6 col-lg-4 mb-4">
-        <div *ngIf="evenement" class="card bg-dark text-light rounded-4 overflow-hidden mx-auto" style="max-width: 500px;">
-          <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 220px; object-fit: cover;">
+        <div *ngIf="evenement" class="card bg-dark text-light rounded-4 overflow-hidden mx-auto"
+          style="max-width: 500px;">
+          <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100"
+            style="height: 220px; object-fit: cover;">
           <div class="card-body p-4">
             <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
             <p class="text-center mb-4">{{ evenement.description }}</p>
@@ -26,10 +28,18 @@
       <!-- Deuxième colonne (Sélection de date et créneaux horaires) -->
       <div class="col-md-6 col-lg-8 mb-4">
         <div class="card bg-dark text-light rounded-4 px-4 py-3">
+
+          <span *ngIf="hasRole">
+            <input type="date" [(ngModel)]="selectedDate" (change)="onDateChange($event)" class="form-control mb-3">
+            <button (click)="generateSlots()" class="btn btn-secondary mb-2">Générer des créneaux</button>
+          </span>
+
           <label for="date-picker" class="text-light">Choisissez une date :</label>
-          <input type="date" id="date-picker" [(ngModel)]="selectedDate" (change)="onDateChange($event)" class="form-control mb-3">
+          <input type="date" id="date-picker" [(ngModel)]="selectedDate" (change)="onDateChange($event)"
+            class="form-control mb-3">
+
           <hr class="border-light" />
-          
+
           <!-- Affichage des créneaux horaires -->
           <div *ngIf="timeSlots && timeSlots.length > 0">
             <h5>Créneaux horaires disponibles pour le {{ selectedDate }} :</h5>

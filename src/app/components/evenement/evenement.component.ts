@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { TimeSlot } from '../../models/time-slot/time-slot.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RoleService } from '../../services/role/role.service';
 
 @Component({
   selector: 'app-evenement',
@@ -20,9 +21,11 @@ export class EvenementComponent implements OnInit {
   selectedDate: string = '';
   timeSlots: TimeSlot[] = [];  // Correctement défini comme un tableau de TimeSlot[]
   isLoading = true;
+  hasRole = false!
 
   constructor(
     private route: ActivatedRoute,
+    private roleService: RoleService,
     private evenementService: EvenementService,
     private reservationService: ReservationService,
     private titleService: Title
@@ -37,6 +40,7 @@ export class EvenementComponent implements OnInit {
 
     this.evenementId = id;
     this.loadEventDetails(id);
+    this.hasRole = this.roleService.hasRole('ROLE_ADMIN');
   }
 
   loadEventDetails(id: number): void {
@@ -60,6 +64,24 @@ export class EvenementComponent implements OnInit {
     } else {
       this.timeSlots = []; // On vide les créneaux si la date est vide
     }
+  }
+  
+  generateSlots(): void {
+    if (!this.selectedDate) {
+      console.error('Aucune date sélectionnée.');
+      return;
+    }
+  
+    const dateObj = new Date(this.selectedDate); // Conversion du string vers Date
+    this.reservationService.generateSlotsForDay(dateObj).subscribe({
+      next: (slots: TimeSlot[]) => {
+        this.timeSlots = slots;
+        console.log('Créneaux générés:', slots);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la génération des créneaux', err);
+      }
+    });
   }
   
   
