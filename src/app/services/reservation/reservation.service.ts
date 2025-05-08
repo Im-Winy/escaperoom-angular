@@ -32,10 +32,11 @@ export class ReservationService {
       return throwError(() => new Error('Utilisateur non connecté ou id manquant.'));
     }
   
-    const url = `${this.host}/api/auth/reservation/${user.id}/${idEvenement}`;
-    const params = new HttpParams().set('timeSlotId', timeSlotId);
+    const url = `${this.host}/api/auth/reservation/${user.idUser}/${idEvenement}`;
+    const params = new HttpParams().set('timeSlotId', timeSlotId.toString());  // Assurez-vous que timeSlotId est bien un string
   
     return this.http.post<Reservation>(url, null, { params });
   }
+  
   
 }

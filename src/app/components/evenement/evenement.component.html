@@ -54,6 +54,17 @@
                 <tr *ngFor="let slot of timeSlots">
                   <td>{{ slot.startTime.slice(0, 5) }}</td>
                   <td>{{ slot.endTime.slice(0, 5) }}</td>
+                  <td>
+                    <button class="btn btn-outline-light px-4 py-2 rounded-2 border-1" (click)="reserver(slot)">
+                      Réserver
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline-light px-4 py-2 rounded-2" (click)="annulerReservation(slot)">
+                      Annuler
+                    </button>
+                  </td>
+                                    
                 </tr>
               </tbody>
             </table>

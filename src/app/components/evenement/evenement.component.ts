@@ -8,6 +8,8 @@ import { TimeSlot } from '../../models/time-slot/time-slot.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoleService } from '../../services/role/role.service';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { Evenement } from '../../models/evenement/evenement.model';
 
 @Component({
   selector: 'app-evenement',
@@ -16,7 +18,10 @@ import { RoleService } from '../../services/role/role.service';
   styleUrls: ['./evenement.component.css']
 })
 export class EvenementComponent implements OnInit {
-  evenement: any;
+annulerReservation(_t58: TimeSlot) {
+throw new Error('Method not implemented.');
+}
+  evenement!: Evenement;
   evenementId!: number;
   selectedDate: string = '';
   timeSlots: TimeSlot[] = [];  // Correctement défini comme un tableau de TimeSlot[]
@@ -28,7 +33,8 @@ export class EvenementComponent implements OnInit {
     private roleService: RoleService,
     private evenementService: EvenementService,
     private reservationService: ReservationService,
-    private titleService: Title
+    private titleService: Title,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +47,25 @@ export class EvenementComponent implements OnInit {
     this.evenementId = id;
     this.loadEventDetails(id);
     this.hasRole = this.roleService.hasRole('ROLE_ADMIN');
+  }
+
+  reserver(slot: TimeSlot): void {
+    const user = this.authService.getUserFromLocalCache();
+
+    if (!user || !user.id) {
+      console.error('Utilisateur non connecté ou id manquant');
+      alert('Vous devez être connecté pour effectuer une réservation.');
+      return;  // Empêche de procéder à la réservation si l'utilisateur n'est pas valide
+    }
+
+    this.reservationService.reserve(slot.id, this.evenement.idEvenement).subscribe(
+      (response) => {
+        console.log('Réservation réussie', response);
+      },
+      (error) => {
+        console.error('Erreur lors de la réservation', error);
+      }
+    );
   }
 
   loadEventDetails(id: number): void {
@@ -65,13 +90,13 @@ export class EvenementComponent implements OnInit {
       this.timeSlots = []; // On vide les créneaux si la date est vide
     }
   }
-  
+
   generateSlots(): void {
     if (!this.selectedDate) {
       console.error('Aucune date sélectionnée.');
       return;
     }
-  
+
     const dateObj = new Date(this.selectedDate); // Conversion du string vers Date
     this.reservationService.generateSlotsForDay(dateObj).subscribe({
       next: (slots: TimeSlot[]) => {
@@ -83,8 +108,8 @@ export class EvenementComponent implements OnInit {
       }
     });
   }
-  
-  
+
+
   loadAvailableTimeSlots(): void {
     if (this.selectedDate) {
       this.reservationService.getAvailableTimeSlotsForEvent(this.evenementId, this.selectedDate)
@@ -99,5 +124,5 @@ export class EvenementComponent implements OnInit {
         });
     }
   }
-  
+
 }
