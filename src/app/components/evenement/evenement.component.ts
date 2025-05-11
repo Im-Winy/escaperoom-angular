@@ -18,9 +18,7 @@ import { Evenement } from '../../models/evenement/evenement.model';
   styleUrls: ['./evenement.component.css']
 })
 export class EvenementComponent implements OnInit {
-annulerReservation(_t58: TimeSlot) {
-throw new Error('Method not implemented.');
-}
+
   evenement!: Evenement;
   evenementId!: number;
   selectedDate: string = '';
@@ -61,11 +59,16 @@ throw new Error('Method not implemented.');
     this.reservationService.reserve(slot.id, this.evenement.idEvenement).subscribe(
       (response) => {
         console.log('Réservation réussie', response);
+        this.loadAvailableTimeSlots();
       },
       (error) => {
         console.error('Erreur lors de la réservation', error);
       }
     );
+  }
+
+  annulerReservation(_t58: TimeSlot) {
+    throw new Error('Method not implemented.');
   }
 
   loadEventDetails(id: number): void {
@@ -108,7 +111,6 @@ throw new Error('Method not implemented.');
       }
     });
   }
-
 
   loadAvailableTimeSlots(): void {
     if (this.selectedDate) {
