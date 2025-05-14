@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Paiement</h4>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #paymentForm="ngForm" novalidate>
+                        <div class="mb-3">
+                            <label for="reservationId" class="form-label">ID de réservation</label>
+                            <input type="number" class="form-control" id="reservationId" name="reservationId"
+                                [(ngModel)]="reservationId" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="montant" class="form-label">Montant (€)</label>
+                            <input type="number" class="form-control" id="montant" name="amount"
+                                [(ngModel)]="paymentRequest.montant" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Numéro de carte</label>
+                            <input type="text" class="form-control" id="cardNumber" name="cardNumber"
+                                [(ngModel)]="paymentRequest.numeroCarteBancaire" required maxlength="19"
+                                placeholder="1234 5678 9012 3456" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expiryDate" class="form-label">Date d'expiration</label>
+                                <input type="text" class="form-control" id="expiryDate" name="expiryDate"
+                                    [(ngModel)]="paymentRequest.dateExppiration" required
+                                    pattern="^(0[1-9]|1[0-2])\/\d{2}$" placeholder="MM/AA" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" name="cvv"
+                                    [(ngModel)]="paymentRequest.cvv" required maxlength="4" placeholder="123" />
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" [disabled]="paymentForm.invalid">
+                                Payer
+                            </button>
+                        </div>
+                    </form>
+
+                    <div *ngIf="paiement" class="alert alert-success mt-4" role="alert">
+                        <h5 class="alert-heading">✅ Paiement effectué</h5>
+                        <hr />
+                        <p><strong>Montant :</strong> {{ paiement.montant }} €</p>
+                        <p><strong>Statut :</strong> {{ paiement.statut }}</p>
+                        <p><strong>Date :</strong> {{ paiement.datePaiement | date: 'dd/MM/yyyy HH:mm' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

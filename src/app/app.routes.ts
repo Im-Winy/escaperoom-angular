@@ -11,8 +11,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { UserComponent } from './components/user/user.component';
 import { AdminComponent } from './components/admin/admin.component';
-import { ReservationComponent } from './components/reservation/reservation.component';
 import { roleGuard } from './guard/role.guard';
+import { PaiementComponent } from './components/paiement/paiement.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'welcome', pathMatch: 'full' }, // Route pour la page "Accueil"
@@ -26,6 +26,6 @@ export const routes: Routes = [
     { path: 'admin', component: AdminComponent, canActivate: [AuthenticationGuard, roleGuard], data: { role: ['ROLE_ADMIN'] } },  // Route pour la page "Administrateur"
     { path: 'evenement/:id', component: EvenementComponent, canActivate: [AuthenticationGuard] }, // Route pour la page "Evenement"
     { path: 'tous-les-evenements', component: TousLesEvenementsComponent, canActivate: [AuthenticationGuard] },  // Route pour la page "tous les Evenements"
-    { path: 'booking', component: ReservationComponent, canActivate: [AuthenticationGuard] },  // Route pour la page "tous les Evenements"
+    { path: 'booking', component: PaiementComponent, canActivate: [AuthenticationGuard] },  // Route pour la page "tous les Evenements"
     { path: '**', component: PageNotFoundComponent } // Route pour la page "page introuvable / erreur 404"
 ];
