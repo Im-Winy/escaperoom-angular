@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/user/user.model';
 import { Title } from '@angular/platform-browser';
+import { Reservation } from '../../models/reservation/reservation.model';
+import { ReservationService } from '../../services/reservation/reservation.service';
 
 @Component({
   selector: 'app-user',
+  standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
@@ -17,19 +20,23 @@ export class UserComponent implements OnInit {
 
   user!: User;
   formUpdate!: FormGroup;
-  errorMessage: string = '';
-  successMessage: string = '';
+  errorMessage = '';
+  successMessage = '';
+  reservations: Reservation[] = [];
+  groupedReservations: Reservation[][] = [];
+  userId!: number;
 
   constructor(
     private authenticationService: AuthenticationService,
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private userService: UserService,
+    private reservationService: ReservationService,
     private titleService: Title
   ) { }
 
   ngOnInit(): void {
-
     this.titleService.setTitle('Profil');
+
     this.formUpdate = this.fb.group({
       prenom: ['', Validators.required],
       nom: ['', Validators.required],
@@ -37,13 +44,40 @@ export class UserComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]]
     });
 
-    this.getUser();
+    this.getUser(); // ✅ Pas de groupReservations ici
   }
 
   getUser(): void {
     this.user = this.authenticationService.getUserFromLocalCache();
+    console.log('Utilisateur récupéré du cache:', this.user);
+
     if (this.user) {
+      this.userId = this.user.idUser;
       this.patchForm();
+      this.loadReservations();
+    } else {
+      console.warn('Aucun utilisateur trouvé dans le cache local');
+    }
+  }
+
+  loadReservations(): void {
+    console.log('Chargement des réservations pour userId:', this.userId);
+    this.reservationService.getReservationsByUserId(this.userId).subscribe({
+      next: (data) => {
+        console.log('Données des réservations :', data);
+        this.reservations = data;
+        this.groupReservations(); // ✅ regroupement après chargement
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des réservations :', err);
+      }
+    });
+  }
+
+  groupReservations(): void {
+    this.groupedReservations = [];
+    for (let i = 0; i < this.reservations.length; i += 2) {
+      this.groupedReservations.push(this.reservations.slice(i, i + 2));
     }
   }
 
@@ -56,11 +90,12 @@ export class UserComponent implements OnInit {
     });
   }
 
-  updateUser() {
+  updateUser(): void {
     if (this.formUpdate.invalid || !this.user.idUser) {
       console.warn("Formulaire invalide ou utilisateur non sélectionné.");
       return;
     }
+
     const formData = new FormData();
     formData.append('prenom', this.formUpdate.value.prenom);
     formData.append('nom', this.formUpdate.value.nom);

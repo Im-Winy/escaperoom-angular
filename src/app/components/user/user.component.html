@@ -1,64 +1,147 @@
-<main style="background-color: #F6B51F;">
+<!-- Conteneur principal avec fond jaune et un padding en haut -->
+<main style="background-color: #F6B51F; min-height: 100vh; padding-top: 40px;">
 
-    <div class="container py-5">
-        <div class="user-container">
-            <h2 class="mb-4 text-center">Modifier les informations de {{ user.username }}</h2>
+  <!-- Conteneur Bootstrap avec un padding vertical -->
+  <div class="container py-5">
 
-            <!-- Message de succès -->
-            <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4">
-                <i class="fas fa-check-circle me-2"></i> {{ successMessage }}
-            </div>
+    <!-- Ligne centrée horizontalement -->
+    <div class="row justify-content-center">
 
-            <!-- Message d'erreur -->
-            <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4">
-                <i class="fas fa-exclamation-circle me-2"></i> {{ errorMessage }}
-            </div>
+      <!-- Formulaire de mise à jour de l'utilisateur -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <h2 class="mb-4 text-center text-white">Mettre à jour {{ user.username }}</h2>
 
-            <form [formGroup]="formUpdate" (ngSubmit)="updateUser()" class="p-4 border rounded shadow-sm bg-light">
-                <div class="form-group mb-3">
-                    <label for="prenom" class="form-label">Prénom</label>
-                    <input id="prenom" type="text" formControlName="prenom" class="form-control"
-                        placeholder="Entrez votre prénom" />
-                    <div *ngIf="formUpdate.controls['prenom'].invalid && formUpdate.controls['prenom'].touched"
-                        class="text-danger">
-                        Le prénom est requis.
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="nom" class="form-label">Nom</label>
-                    <input id="nom" type="text" formControlName="nom" class="form-control"
-                        placeholder="Entrez votre nom" />
-                    <div *ngIf="formUpdate.controls['nom'].invalid && formUpdate.controls['nom'].touched"
-                        class="text-danger">
-                        Le nom est requis.
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="username" class="form-label">Nom d'utilisateur</label>
-                    <input id="username" type="text" formControlName="username" class="form-control"
-                        placeholder="Entrez votre nom d'utilisateur" />
-                    <div *ngIf="formUpdate.controls['username'].invalid && formUpdate.controls['username'].touched"
-                        class="text-danger">
-                        Le nom d'utilisateur est requis.
-                    </div>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" formControlName="email" class="form-control"
-                        placeholder="Entrez votre email" />
-                    <div *ngIf="formUpdate.controls['email'].invalid && formUpdate.controls['email'].touched"
-                        class="text-danger">
-                        Un email valide est requis.
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100" [disabled]="formUpdate.invalid">
-                    <i class="fas fa-save"></i> Mettre à jour
-                </button>
-            </form>
+        <!-- Affichage d'un message de succès si présent -->
+        <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4">
+          <i class="fas fa-check-circle me-2"></i> {{ successMessage }}
         </div>
+
+        <!-- Affichage d'un message d'erreur si présent -->
+        <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4">
+          <i class="fas fa-exclamation-circle me-2"></i> {{ errorMessage }}
+        </div>
+
+        <!-- Formulaire Angular réactif -->
+        <form [formGroup]="formUpdate" (ngSubmit)="updateUser()" class="p-4 border rounded shadow-sm bg-white">
+
+          <!-- Champ Prénom -->
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom</label>
+            <input id="prenom" type="text" formControlName="prenom" class="form-control"
+              placeholder="Entrez votre prénom" />
+            <div *ngIf="formUpdate.get('prenom')?.invalid && formUpdate.get('prenom')?.touched" class="text-danger">
+              Le prénom est requis.
+            </div>
+          </div>
+
+          <!-- Champ Nom -->
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input id="nom" type="text" formControlName="nom" class="form-control" placeholder="Entrez votre nom" />
+            <div *ngIf="formUpdate.get('nom')?.invalid && formUpdate.get('nom')?.touched" class="text-danger">
+              Le nom est requis.
+            </div>
+          </div>
+
+          <!-- Champ Nom d'utilisateur -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur</label>
+            <input id="username" type="text" formControlName="username" class="form-control"
+              placeholder="Entrez votre nom d'utilisateur" />
+            <div *ngIf="formUpdate.get('username')?.invalid && formUpdate.get('username')?.touched" class="text-danger">
+              Le nom d'utilisateur est requis.
+            </div>
+          </div>
+
+          <!-- Champ Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" formControlName="email" class="form-control"
+              placeholder="Entrez votre email" />
+            <div *ngIf="formUpdate.get('email')?.invalid && formUpdate.get('email')?.touched" class="text-danger">
+              Un email valide est requis.
+            </div>
+          </div>
+
+          <!-- Bouton de soumission -->
+          <button type="submit" class="btn btn-dark w-100" [disabled]="formUpdate.invalid">
+            <i class="fas fa-save me-1"></i> Mettre à jour
+          </button>
+        </form>
+      </div>
+
+      <!-- Section des réservations utilisateur -->
+      <div class="col-md-6 col-lg-8 mb-4">
+        <h3 class="text-center text-white mb-4">Mes réservations</h3>
+
+        <!-- Affichage en carrousel -->
+        <div id="reservationCarousel" class="carousel slide" data-bs-ride="carousel">
+
+          <!-- Slides du carrousel -->
+          <div class="carousel-inner">
+            <div *ngFor="let group of groupedReservations; let i = index" class="carousel-item"
+              [class.active]="i === 0">
+
+              <!-- Cartes affichées en grille -->
+              <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div *ngFor="let reservation of group" class="col">
+                  <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                      <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
+                      <p><strong>Date :</strong> {{ reservation.dateReservation }}</p>
+                      <p><strong>TTC :</strong> {{ reservation.montant }} €</p>
+                      <p><strong>HT :</strong> {{ reservation.montantHT }} €</p>
+                      <p><strong>TVA :</strong> {{ reservation.montantTVA }} €</p>
+                      <p *ngIf="reservation.evenement"><strong>Événement :</strong> {{ reservation.evenement.nom }}</p>
+                      <p *ngIf="reservation.evenement">
+                        <strong>Description :</strong>
+                        {{ reservation.evenement.description | slice: 0:100 }}...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Boutons précédent / suivant -->
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-outline-light" type="button" data-bs-target="#reservationCarousel"
+              data-bs-slide="prev" aria-label="Précédent">
+              <i class="fas fa-chevron-left me-2"></i> Précédent
+            </button>
+            <button class="btn btn-outline-light" type="button" data-bs-target="#reservationCarousel"
+              data-bs-slide="next" aria-label="Suivant">
+              Suivant <i class="fas fa-chevron-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Liste classique (moins de 5 réservations) -->
+        <ng-template #classicList>
+          <div *ngIf="reservations.length > 0; else noReservations">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <div *ngFor="let reservation of reservations" class="col">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
+                    <p><strong>Date :</strong> {{ reservation.dateReservation }}</p>
+                    <p><strong>TTC :</strong> {{ reservation.montant }} €</p>
+                    <p><strong>HT :</strong> {{ reservation.montantHT }} €</p>
+                    <p><strong>TVA :</strong> {{ reservation.montantTVA }} €</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Message si aucune réservation -->
+        <ng-template #noReservations>
+          <p class="text-center text-muted mt-3">Aucune réservation trouvée pour cet utilisateur.</p>
+        </ng-template>
+      </div>
     </div>
+  </div>
 </main>

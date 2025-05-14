@@ -3,7 +3,7 @@ import { AppSettings } from '../../settings/app.settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { TimeSlot } from '../../models/time-slot/time-slot.model';
-import { Reservation } from '../../models/models/reservation.model';
+import { Reservation } from '../../models/reservation/reservation.model';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
@@ -24,7 +24,10 @@ export class ReservationService {
     const params = new HttpParams().set('date', date.toISOString().split('T')[0]);
     return this.http.post<TimeSlot[]>(`${this.host}/api/auth/generer-creneaux-journee`, null, { params });
   }
-  
+
+  public getReservationsByUserId(userId: number): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.host}/api/auth/historique-reservations/user/${userId}`);
+  }
 
   public reserve(timeSlotId: number, idEvenement: number): Observable<Reservation> {
     const user = this.authService.getUserFromLocalCache();
