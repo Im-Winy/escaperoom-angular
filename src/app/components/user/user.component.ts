@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/user/user.model';
 import { Title } from '@angular/platform-browser';
 import { Reservation } from '../../models/reservation/reservation.model';
 import { ReservationService } from '../../services/reservation/reservation.service';
+import { Paiement, PaiementService } from '../../services/paiement/paiement.service';
 
 @Component({
   selector: 'app-user',
@@ -19,9 +20,11 @@ import { ReservationService } from '../../services/reservation/reservation.servi
 export class UserComponent implements OnInit {
 
   user!: User;
+  paiement!: Paiement;
   formUpdate!: FormGroup;
   errorMessage = '';
   successMessage = '';
+
   reservations: Reservation[] = [];
   groupedReservations: Reservation[][] = [];
   userId!: number;
@@ -41,7 +44,8 @@ export class UserComponent implements OnInit {
       prenom: ['', Validators.required],
       nom: ['', Validators.required],
       username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required,]]
     });
 
     this.getUser(); // ✅ Pas de groupReservations ici
@@ -86,7 +90,8 @@ export class UserComponent implements OnInit {
       prenom: this.user.prenom,
       nom: this.user.nom,
       username: this.user.username,
-      email: this.user.email
+      email: this.user.email,
+      password: this.user.password
     });
   }
 
@@ -101,6 +106,7 @@ export class UserComponent implements OnInit {
     formData.append('nom', this.formUpdate.value.nom);
     formData.append('username', this.formUpdate.value.username);
     formData.append('email', this.formUpdate.value.email);
+    formData.append('password', this.formUpdate.value.password);
 
     this.userService.updateMyProfile(formData, this.user.idUser).subscribe({
       next: (updatedUser) => {

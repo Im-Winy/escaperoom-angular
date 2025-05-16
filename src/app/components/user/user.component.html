@@ -9,7 +9,7 @@
 
       <!-- Formulaire de mise à jour de l'utilisateur -->
       <div class="col-md-6 col-lg-4 mb-4">
-        <h2 class="mb-4 text-center text-white">Mettre à jour {{ user.username }}</h2>
+        <h2 class="mb-4 text-center text-black">Mettre à jour {{ user.username }}</h2>
 
         <!-- Affichage d'un message de succès si présent -->
         <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4">
@@ -63,6 +63,16 @@
             </div>
           </div>
 
+          <!-- Champ Password -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input id="password" type="password" formControlName="password" class="form-control"
+              placeholder="Entrez votre mot de passe" />
+            <div *ngIf="formUpdate.get('password')?.invalid && formUpdate.get('password')?.touched" class="text-danger">
+              Un mot de passe valide est requis.
+            </div>
+          </div>
+
           <!-- Bouton de soumission -->
           <button type="submit" class="btn btn-dark w-100" [disabled]="formUpdate.invalid">
             <i class="fas fa-save me-1"></i> Mettre à jour
@@ -72,7 +82,7 @@
 
       <!-- Section des réservations utilisateur -->
       <div class="col-md-6 col-lg-8 mb-4">
-        <h3 class="text-center text-white mb-4">Mes réservations</h3>
+        <h3 class="text-center text-black mb-4">Historique des réservations</h3>
 
         <!-- Affichage en carrousel -->
         <div id="reservationCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -88,15 +98,20 @@
                   <div class="card shadow-sm h-100">
                     <div class="card-body">
                       <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
-                      <p><strong>Date :</strong> {{ reservation.dateReservation }}</p>
-                      <p><strong>TTC :</strong> {{ reservation.montant }} €</p>
-                      <p><strong>HT :</strong> {{ reservation.montantHT }} €</p>
-                      <p><strong>TVA :</strong> {{ reservation.montantTVA }} €</p>
-                      <p *ngIf="reservation.evenement"><strong>Événement :</strong> {{ reservation.evenement.nom }}</p>
-                      <p *ngIf="reservation.evenement">
-                        <strong>Description :</strong>
-                        {{ reservation.evenement.description | slice: 0:100 }}...
+                      <p><strong>Date de réservation :</strong> {{ reservation.dateReservation }}</p>
+                      <p><strong>Montant TTC :</strong> {{ reservation.montant }} EUR</p>
+                      <p><strong>Montant HT :</strong> {{ reservation.montantHT }} EUR</p>
+                      <p><strong>Montant TVA :</strong> {{ reservation.montantTVA }} EUR</p>
+                      <p><strong>Événement :</strong> {{ reservation.evenement.nom }}</p>
+                      <p><strong>Date de l'évènement :</strong> {{ reservation.timeSlot.date }}</p>
+                      <p><strong>Heure de l'évènement :</strong> {{ reservation.timeSlot.startTime }}</p>
+                      <p *ngIf="reservation.paiement; else noPaiement">
+                        <strong>Heure de l'évènement :</strong> {{ reservation.paiement.statut }}
                       </p>
+
+                      <ng-template #noPaiement>
+                        <p><em>L'évènement n'a pas encore été payé</em></p>
+                      </ng-template>
                     </div>
                   </div>
                 </div>
