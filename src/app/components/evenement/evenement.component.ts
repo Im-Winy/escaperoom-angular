@@ -56,7 +56,7 @@ export class EvenementComponent implements OnInit {
       return;  // Empêche de procéder à la réservation si l'utilisateur n'est pas valide
     }
 
-    this.reservationService.reserve(slot.id, this.evenement.idEvenement).subscribe(
+    this.reservationService.reserve(slot.idTimeSlot, this.evenement.idEvenement).subscribe(
       (response) => {
         console.log('Réservation réussie', response);
         this.loadAvailableTimeSlots();
