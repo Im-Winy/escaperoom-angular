@@ -99,14 +99,14 @@
                     <div class="card-body">
                       <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
                       <p><strong>Date de réservation :</strong> {{ reservation.dateReservation }}</p>
-                      <p><strong>Montant TTC :</strong> {{ reservation.montant }} EUR</p>
-                      <p><strong>Montant HT :</strong> {{ reservation.montantHT }} EUR</p>
-                      <p><strong>Montant TVA :</strong> {{ reservation.montantTVA }} EUR</p>
+                      <p><strong>Montant total (TTC) :</strong> {{ reservation.montant }} EUR</p>
+                      <p><strong>Montant hors taxes (HT) :</strong> {{ reservation.montantHT }} EUR</p>
+                      <p><strong>Montant de la TVA :</strong> {{ reservation.montantTVA }} EUR</p>
                       <p><strong>Événement :</strong> {{ reservation.evenement.nom }}</p>
                       <p><strong>Date de l'évènement :</strong> {{ reservation.timeSlot.date }}</p>
                       <p><strong>Heure de l'évènement :</strong> {{ reservation.timeSlot.startTime }}</p>
                       <p *ngIf="reservation.paiement; else noPaiement">
-                        <strong>Heure de l'évènement :</strong> {{ reservation.paiement.statut }}
+                        <strong>Statut de paiement :</strong> {{ reservation.paiement.statut }}
                       </p>
 
                       <ng-template #noPaiement>
