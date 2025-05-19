@@ -18,8 +18,6 @@ import { User } from '../../models/user/user.model';
 })
 export class PaiementComponent implements OnInit {
 
-  @ViewChild('paymentForm') paymentForm!: NgForm;
-
   reservationId!: number;
   paymentRequest: PaymentRequest = {
     montant: 0,
@@ -39,11 +37,12 @@ export class PaiementComponent implements OnInit {
     private reservationService: ReservationService,
     private authenticationService: AuthenticationService,
     private titleService: Title
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('Paiement');
     this.getUser();
+    this.loadReservations();
   }
 
   selectedReservation(reservation: Reservation): void {

@@ -97,7 +97,7 @@
                 <div *ngFor="let reservation of group" class="col">
                   <div class="card shadow-sm h-100">
                     <div class="card-body">
-                      <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
+                      <h5 class="card-title">Réservation #{{ reservation.numeroReservation }}</h5>
                       <p><strong>Date de réservation :</strong> {{ reservation.dateReservation }}</p>
                       <p><strong>Montant total (TTC) :</strong> {{ reservation.montant }} EUR</p>
                       <p><strong>Montant hors taxes (HT) :</strong> {{ reservation.montantHT }} EUR</p>
@@ -135,7 +135,7 @@
 
         </div>
       </div>
-      
+
     </div>
   </div>
 </main>
