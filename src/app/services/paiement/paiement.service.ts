@@ -4,10 +4,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface PaymentRequest {
-  montant: 0,
-  numeroCarteBancaire: '',
-  dateExppiration: '',
-  cvv: ''
+  montant: number;
+  numeroCarteBancaire: string;
+  dateExppiration: string;
+  cvv: string;
 }
 
 export interface Paiement {

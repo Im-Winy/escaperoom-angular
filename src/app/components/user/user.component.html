@@ -110,12 +110,14 @@
                       </p>
 
                       <ng-template #noPaiement>
-                        <p><em>L'évènement n'a pas encore été payé</em></p>
+                        <p><em>Non payé</em></p>
                       </ng-template>
+
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -130,33 +132,10 @@
               Suivant <i class="fas fa-chevron-right ms-2"></i>
             </button>
           </div>
+
         </div>
-
-
-        <!-- Liste classique (moins de 5 réservations) -->
-        <ng-template #classicList>
-          <div *ngIf="reservations.length > 0; else noReservations">
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-              <div *ngFor="let reservation of reservations" class="col">
-                <div class="card shadow-sm h-100">
-                  <div class="card-body">
-                    <h5 class="card-title">Réservation #{{ reservation.idReservation }}</h5>
-                    <p><strong>Date :</strong> {{ reservation.dateReservation }}</p>
-                    <p><strong>TTC :</strong> {{ reservation.montant }} €</p>
-                    <p><strong>HT :</strong> {{ reservation.montantHT }} €</p>
-                    <p><strong>TVA :</strong> {{ reservation.montantTVA }} €</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-
-        <!-- Message si aucune réservation -->
-        <ng-template #noReservations>
-          <p class="text-center text-muted mt-3">Aucune réservation trouvée pour cet utilisateur.</p>
-        </ng-template>
       </div>
+      
     </div>
   </div>
 </main>

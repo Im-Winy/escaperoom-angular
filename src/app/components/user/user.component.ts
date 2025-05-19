@@ -47,7 +47,7 @@ export class UserComponent implements OnInit {
       nom: ['', Validators.required],
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['']
     });
 
     // Charger les informations de l'utilisateur
@@ -97,8 +97,7 @@ export class UserComponent implements OnInit {
       prenom: this.user.prenom,
       nom: this.user.nom,
       username: this.user.username,
-      email: this.user.email,
-      password: this.user.password // ⚠️ Afficher le mot de passe n’est pas recommandé
+      email: this.user.email
     });
   }
 
@@ -116,7 +115,11 @@ export class UserComponent implements OnInit {
     formData.append('nom', this.formUpdate.value.nom);
     formData.append('username', this.formUpdate.value.username);
     formData.append('email', this.formUpdate.value.email);
-    formData.append('password', this.formUpdate.value.password);
+    // ✅ Si un mot de passe a été saisi, on l’envoie
+    const passwordValue = this.formUpdate.value.password;
+    if (passwordValue && passwordValue.trim() !== '') {
+      formData.append('password', passwordValue);
+    }
 
     // Appel du service pour mettre à jour le profil
     this.userService.updateMyProfile(formData, this.user.idUser).subscribe({
