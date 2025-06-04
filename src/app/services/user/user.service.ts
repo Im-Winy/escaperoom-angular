@@ -29,7 +29,7 @@ export class UserService {
 
   // Met à jour un utilisateur existant en envoyant un formulaire de données
   public updateUser(formData: FormData, userId: number): Observable<User> {
-    return this.http.put<User>(`${this.host}/api/auth/update/${userId}`, formData);
+    return this.http.put<User>(`${this.host}/api/admin/update/${userId}`, formData);
   }
 
   // Met à jour un utilisateur existant en envoyant un formulaire de données
